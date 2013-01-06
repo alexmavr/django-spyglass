@@ -3,9 +3,9 @@
         "model": "spyglass.Site",
         "pk": 1,
         "fields": {
-            "name":"foo",
-            "url":"http://foo.bar",
-            "poll_time": 42
+            "name":"News247",
+            "url":"http://news247.gr",
+            "poll_time": 12
 
         }
     },
@@ -15,7 +15,26 @@
         "fields": {
             "site": 1,
             "field_name": "Headline",
-            "xpath": "some random Xpath here"
+            "xpath": "/html/body/div[4]/div/div/div[2]/div/div/h2/a"
         }
     }
+    {
+        "model": "spyglass.DataField",
+        "pk": 1,
+        "fields": {
+            "site": 1,
+            "field_name": "Category",
+            "xpath": "/html/body/div[4]/div/div/div[2]/div/div/div/a"
+        }
+    }
+    {
+        "model": "spyglass.DataField",
+        "pk": 1,
+        "fields": {
+            "site": 1,
+            "field_name": "Subtitle",
+            "xpath": "/html/body/div[4]/div/div/div[2]/div/div/div/p"
+        }
+    }
+
 ]

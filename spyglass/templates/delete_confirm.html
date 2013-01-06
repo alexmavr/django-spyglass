@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="pull-right">
+        <a href="/accounts/profile/"><i class="icon-arrow-left"></i> Back to My Searches</a>
+    </div>
+    <br>
+
+    <p>Are you sure you wish to delete the query: <strong>{{ query.query }}</strong>?</p>
+    <a class="btn btn-primary btn-large" href="/accounts/delete/{{ rqid }}">Confirm</a>
+{% endblock %}

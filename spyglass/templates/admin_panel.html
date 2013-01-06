@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+  <h4> Admin panel </h4>
+  <div class="row">
+      <div class="span9" style="text-align: center">
+        <div class="table-container">
+          <table class="table table-condensed table-bordered" >
+              <tr>
+                  <th> E-mail </th>
+                  <th> Key </th>
+                  <th> Change </th>
+                  <th> Activity </th>
+                  <th> Last Seen </th>
+              </tr>
+              {% for row in final_data %}
+                  <tr 
+                      onmouseover="ChangeColor(this,  true);" 
+                      onmouseout="ChangeColor(this,  false);" 
+                      >
+
+                      <td> {{ row.1.email}} </td>
+                      <td> <i class="btn btn-link" 
+                              data-original-title="Api Key" id="{{ row.1.api_key }}" 
+                              data-placement="top"
+                              data-html='true'
+                              data-animation='true'
+                              data-width='400'
+                              onClick="$('#{{ row.1.api_key }}').popover('toggle');" 
+                              data-content='{{ row.1.api_key }} '
+                              >{{ row.1.api_key|truncatechars:10 }}</i></td>
+                      <td>
+                          {% if row.1.able %}
+                              <a class="btn btn-block btn-small btn-danger" href="/change/{{ row.1.uid }}/0">Disable</a>
+                          {% else %}
+                              <a class="btn btn-block btn-small btn-success" href="/change/{{ row.1.uid }}/1">Enable</a>
+                          {% endif %}
+                      </td>
+                      <td  style="text-align:center">
+                          {% if row.1.active %}
+                              <div class="btn btn-small btn-success" ><i class="icon-ok icon-white"></i></div>
+                          {% else %}
+                              <div class="btn btn-small btn-danger" ><i class="icon-remove icon-white"></i></div>
+                          {% endif %}
+                      </td>
+                      <td>
+                          {% if row.1.last_heard %}
+                              {{ row.1.last_heard|timesince:now }}
+                          {% endif %}
+                      </td>
+                  </tr>
+              {% endfor %}
+          </table>
+        </div>
+      </div>
+  </div>
+
+{% endblock %}

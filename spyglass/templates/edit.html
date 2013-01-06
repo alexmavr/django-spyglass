@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="span7 offset1 well well-large">
+        <div class="pull-right">
+            <a href="/accounts/profile/"><i class="icon-arrow-left"></i> Back to My Searches</a>
+        </div>
+        <br>
+        <br>
+        {% if error %}
+        <div class="offset1 span4 row alert alert-block alert-error">
+            <h4 style="text-align: center">Warning!</h4>
+            <p>The data you have entered is invalid, please try again.</p>
+        </div>
+        {% endif %}
+
+        <form action="/accounts/edit/{{ rqid }}/" method="post" class="form-horizontal">
+            {% csrf_token %}
+            <div class="span4 offset1">
+                    {{ form.as_p }}
+                    {{ form2.as_p }}
+                <br>
+                <button type="submit" class="btn btn-block btn-primary">Submit</button>
+            </div>
+            <br>
+        </form>
+    </div>
+{% endblock %}

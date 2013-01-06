@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+    <script language="javascript">
+        <!--
+        window.onload = redirect("/", 3500)
+        //-->
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="alert alert-success">
+        <h3>Your request has been accepted</h3>
+        <p>You will be notified by email at <b>{{ mail }}</b> when an appropriate torrent shows up.</p>
+    </div>
+    <small>You are being redirected back to our home page</small>
+    <br>
+{% endblock %}

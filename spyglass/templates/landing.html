@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block global_content %}
+    <div class="row">
+        <div class="span3 offset2">
+            <img src="/static/img/captainspyglass.jpg" width="230" height="100" alt="Yarr">
+        </div>
+        <div style="text-align: left" class="span3 well">
+            <h4 style="text-align: center">Waiting for a torrent?</h4><br>
+            <p><strong>1.</strong> Tell us which torrent you're waiting for </p>
+            <p><strong>2.</strong> Be notified by email when it shows up in your favorite torrent site</p>
+            <p><strong>3.</strong> Check our <a href="/faq/">FAQ</a> page for more</p>
+        </div>
+    </div>
+    <br><br>
+
+    <p style="text-align: center"><small> Your email address will <strong>not</strong> be used for any purpose other than to notify you</small></p>
+    <div class="span7 offset1 well well-large">
+        {% if error %}
+        <div class="offset1 span4 row alert alert-block alert-error">
+            <h4 style="text-align: center">Warning!</h4>
+            <p>The data you have entered is invalid, please try again.</p>
+        </div>
+        {% endif %}
+
+        <form action="/thanks/" method="post" class="form-horizontal">
+                {% csrf_token %}
+                <div class="span4 offset1">
+                    {{ form.as_p }}
+                    {{ form2.as_p }}
+                    <br>
+                    <p><small>Want more options? <a href="/accounts/signup">Create an account</a></small></p>
+                <button type="submit" class="btn btn-block btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
