@@ -7,6 +7,18 @@ import datetime
 # Auto generate Api Key on user creation
 models.signals.post_save.connect(create_api_key, sender=User)
 
+
+def get_meta():
+    package = ".".join(settings.METAMODEL.split('.')[:-1])
+    modelclass = settings.METAMODEL.split('.')[-1]
+    Metamodel = __import__(package, globals(),locals(), [modelclass], -1)
+    Metamodel = eval("Metamodel." + modelclass)
+    return Metamodel
+
+Metamodel = get_meta()
+
+
+
 class Site(models.Model):
     name = models.CharField(max_length=150, blank=False,
                                     verbose_name="Site Name")
@@ -25,17 +37,21 @@ class DataField(models.Model):
     xpath = models.CharField(max_length=150, blank=False, verbose_name="XPath")
 
     def __unicode__(self):
-        return self.field_name
+        return self.field_name + " for " + self.site.name
 
 
 class Query(models.Model):
     user = models.ForeignKey(User)
     site = models.ForeignKey(Site, verbose_name="Site")
+    result = models.ForeignKey(Metamodel, blank=True, null=True, default=None)
     completed = models.BooleanField(default=False, blank=False,
                                     verbose_name="Completed")
+    persistent = models.BooleanField(default=False, blank=False,
+                                    verbose_name="Persistent")
     params = models.CharField(max_length=200, blank=False,
                                     verbose_name="Query Parameters")
     next_check = models.DateTimeField(auto_now_add=True, verbose_name="Next check")
+    last_mod = models.DateTimeField(blank=True, verbose_name="Last Modified")
 
     def save(self, *args, **kwargs):
         self.next_check = datetime.datetime.now() + datetime.timedelta(
@@ -43,7 +59,7 @@ class Query(models.Model):
         super(Query, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.params
+        return self.params + " at " + self.site.name + " for " + self.user.email
 
 
 class Crawler(models.Model):

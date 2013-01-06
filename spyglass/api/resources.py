@@ -4,7 +4,7 @@ from tastypie.resources import ModelResource
 from tastypie.validation import Validation
 from tastypie.authentication import Authentication
 from tastypie.authentication import ApiKeyAuthentication
-from tastypie.authorization import DjangoAuthorization
+from tastypie.authorization import Authorization
 from spyglass.models import Crawler
 from spyglass.models import Site
 from spyglass.models import DataField
@@ -12,6 +12,7 @@ from spyglass.models import Query
 
 from django.conf import settings
 
+# import the developer's model from METAMODEL
 def get_meta():
     package = ".".join(settings.METAMODEL.split('.')[:-1])
     modelclass = settings.METAMODEL.split('.')[-1]
@@ -25,11 +26,11 @@ class MetaResource(ModelResource):
     class Meta:
         queryset = Metamodel.objects.all()
         resource_name = 'meta'
-        allowed_methods = ['get','post']
+        allowed_methods = ['get','post','patch']
 
         validation = Validation()
         authentication = Authentication()
-        authorization = DjangoAuthorization()
+        authorization = Authorization()
 
 
 class SiteResource(ModelResource):
@@ -40,7 +41,7 @@ class SiteResource(ModelResource):
 
         validation = Validation()
         authentication = Authentication()
-        authorization = DjangoAuthorization()
+        authorization = Authorization()
 
 
 class PathsResource(ModelResource):
@@ -51,19 +52,21 @@ class PathsResource(ModelResource):
         allowed_methods = ['get']
         validation = Validation()
         authentication = Authentication()
-        authorization = DjangoAuthorization()
+        authorization = Authorization()
 
 
 class QueryResource(ModelResource):
     site = fields.ForeignKey(SiteResource, 'site', full=False)
+    result = fields.ForeignKey(MetaResource, 'result', null=True, blank=True,
+                               full=False)
     class Meta:
         queryset = Query.objects.order_by('next_check')
         resource_name = 'query'
 
-        allowed_methods = ['get','patch']
+        llowed_methods = ['get','patch']
         validation = Validation()
         authentication = Authentication()
-        authorization = DjangoAuthorization()
+        authorization = Authorization()
 
 class CrawlerResource(ModelResource):
     class Meta:
@@ -73,4 +76,4 @@ class CrawlerResource(ModelResource):
         allowed_methods = ['get','patch']
         validation = Validation()
         authentication =  Authentication()
-        authorization = DjangoAuthorization()
+        authorization = Authorization()
