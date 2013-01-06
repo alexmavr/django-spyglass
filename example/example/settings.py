@@ -103,6 +103,14 @@ ROOT_URLCONF = 'example.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'example.wsgi.application'
 
+
+TEMPLATE_CONTEXT_PROCESSORS = (                                                 
+  'django.contrib.auth.context_processors.auth',                                
+  'django.core.context_processors.request',                                     
+  'allauth.account.context_processors.account',                                                                                                                                               
+  'allauth.socialaccount.context_processors.socialaccount',                     
+)          
+
 TEMPLATE_DIRS = (
     PROJECT_ROOT.child('templates'),
     PROJECT_ROOT.child('spyglass').child('templates')
@@ -115,9 +123,13 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.sites',
     'spyglass',
     'core',
     'tastypie',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -159,3 +171,12 @@ SPYGLASS_AUTHORIZED_QUERIES = False
 
 # Create a user for every new email submitted to spyglass (default=False)
 SPYGLASS_ADD_USERS = True
+
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"                                         
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3                                      
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = False
+ACCOUNT_UNIQUE_EMAIL = True                                                     
+ACCOUNT_USERNAME_REQUIRED = False                                               
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "News Spyglass"

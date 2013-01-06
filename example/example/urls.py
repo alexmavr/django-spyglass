@@ -4,6 +4,7 @@ from core.views import landing
 from core.views import thanks
 import spyglass.urls
 
+import allauth.urls
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -11,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^thanks/$', thanks.as_view(), name="thanks"),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include(spyglass.urls)),
+    url(r'^accounts/', include(allauth.urls)),
 )
