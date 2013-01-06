@@ -29,7 +29,6 @@ class Query(models.Model):
     email = models.EmailField(blank=False, verbose_name="User Email")
     site = models.ForeignKey(Site, verbose_name="Site")
     completed = models.BooleanField(default=False, blank=False, verbose_name="Completed")
-    metamodel = models.OnetoOneField(settings.metamodel, verbose_name="Meta Model")
 
     def __unicode__(self):
         return self.email
