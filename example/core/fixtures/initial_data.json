@@ -20,7 +20,7 @@
     },
     {
         "model": "spyglass.DataField",
-        "pk": 1,
+        "pk": 2,
         "fields": {
             "site": 1,
             "field_name": "Category",
@@ -29,7 +29,7 @@
     },
     {
         "model": "spyglass.DataField",
-        "pk": 1,
+        "pk": 3,
         "fields": {
             "site": 1,
             "field_name": "Subtitle",

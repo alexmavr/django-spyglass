@@ -1,13 +1,12 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
-#from tastypie.models import create_api_key
+from tastypie.models import create_api_key
 
 # Auto generate Api Key on user creation
-#models.signals.post_save.connect(create_api_key, sender=User)
+models.signals.post_save.connect(create_api_key, sender=User)
 
 # note: Site.datafields.all() should work
-
 class Site(models.Model):
     name = models.CharField(max_length=150, blank=False, verbose_name="Site Name")
     url = models.URLField(max_length=400, blank=False, verbose_name="Site URL")
@@ -17,10 +16,10 @@ class Site(models.Model):
         return self.name
 
 class DataField(models.Model):
-    site = models.ForeignKey(Site, verbose_name="Site", related_name="datafields")
+    site = models.ForeignKey(Site, verbose_name="Site", related_name="datafields_set")
     field_name = models.CharField(max_length=150, blank=False, verbose_name="Field Name")
-        # Add support for different parsers? (beautiful soup pl0x)
     xpath = models.CharField(max_length=150, blank=False, verbose_name="XPath")
+        # Add support for different parsers? (beautiful soup pl0x)
 
     def __unicode__(self):
         return self.site.name
