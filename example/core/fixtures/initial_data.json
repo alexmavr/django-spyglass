@@ -4,7 +4,9 @@
         "pk": 1,
         "fields": {
             "name":"foo",
-            "url":"http://foo.bar"
+            "url":"http://foo.bar",
+            "poll_time": 42
+
         }
     },
     {
