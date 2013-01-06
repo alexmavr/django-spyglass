@@ -10,6 +10,28 @@ from spyglass.models import Site
 from spyglass.models import DataField
 from spyglass.models import Query
 
+from django.conf import settings
+
+def get_meta():
+    package = ".".join(settings.METAMODEL.split('.')[:-1])
+    modelclass = settings.METAMODEL.split('.')[-1]
+    Metamodel = __import__(package, globals(),locals(), [modelclass], -1)
+    Metamodel = eval("Metamodel." + modelclass)
+    return Metamodel
+
+Metamodel = get_meta()
+
+class MetaResource(ModelResource):
+    class Meta:
+        queryset = Metamodel.objects.all()
+        resource_name = 'meta'
+        allowed_methods = ['get','post']
+
+        validation = Validation()
+        authentication = Authentication()
+        authorization = DjangoAuthorization()
+
+
 class SiteResource(ModelResource):
     class Meta:
         queryset = Site.objects.all()
@@ -33,6 +55,7 @@ class PathsResource(ModelResource):
 
 
 class QueryResource(ModelResource):
+    site = fields.ForeignKey(SiteResource, 'site', full=False)
     class Meta:
         queryset = Query.objects.order_by('next_check')
         resource_name = 'query'

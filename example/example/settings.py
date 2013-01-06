@@ -150,3 +150,5 @@ LOGGING = {
         },
     }
 }
+
+METAMODEL = 'core.models.NewsStory'

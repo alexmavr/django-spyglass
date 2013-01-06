@@ -4,6 +4,7 @@ from api.resources import CrawlerResource
 from api.resources import QueryResource
 from api.resources import PathsResource
 from api.resources import SiteResource
+from api.resources import MetaResource
 
 #Tastypie API
 v1_api = Api(api_name='spyglass')
@@ -11,6 +12,7 @@ v1_api.register(CrawlerResource())
 v1_api.register(QueryResource())
 v1_api.register(SiteResource())
 v1_api.register(PathsResource())
+v1_api.register(MetaResource())
 
 
 urlpatterns = patterns('',
