@@ -3,4 +3,5 @@
 *.swo
 *.swn
 *.~swp
+localsettings.py
 spydb

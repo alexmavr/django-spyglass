@@ -180,3 +180,6 @@ ACCOUNT_EMAIL_VERIFICATION = False
 ACCOUNT_UNIQUE_EMAIL = True                                                     
 ACCOUNT_USERNAME_REQUIRED = False                                               
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "News Spyglass"
+
+
+from localsettings import *
