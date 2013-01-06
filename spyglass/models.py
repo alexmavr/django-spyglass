@@ -1,10 +1,10 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
-from tastypie.models import create_api_key
+#from tastypie.models import create_api_key
 
 # Auto generate Api Key on user creation
-models.signals.post_save.connect(create_api_key, sender=User)
+#models.signals.post_save.connect(create_api_key, sender=User)
 
 # note: Site.datafields.all() should work
 
