@@ -1,0 +1,19 @@
+[
+    {
+        "model": "spyglass.Site",
+        "pk": 1,
+        "fields": {
+            "name":"foo",
+            "url":"http://foo.bar"
+        }
+    },
+    {
+        "model": "spyglass.DataField",
+        "pk": 1,
+        "fields": {
+            "site": 1,
+            "field_name": "Headline",
+            "xpath": "some random Xpath here"
+        }
+    }
+]
