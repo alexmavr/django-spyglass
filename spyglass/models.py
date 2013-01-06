@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 class Site(models.Model):
     name = models.CharField(max_length=150, blank=False, verbose_name="Site Name")
     url = models.URLField(max_length=400, blank=False, verbose_name="Site URL")
+    poll_time = models.IntegerField(blank=False, verbose_name="Polling time in minutes")
 
     def __unicode__(self):
         return self.name
