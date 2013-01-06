@@ -17,7 +17,7 @@
             "field_name": "Headline",
             "xpath": "/html/body/div[4]/div/div/div[2]/div/div/h2/a"
         }
-    }
+    },
     {
         "model": "spyglass.DataField",
         "pk": 1,
@@ -26,7 +26,7 @@
             "field_name": "Category",
             "xpath": "/html/body/div[4]/div/div/div[2]/div/div/div/a"
         }
-    }
+    },
     {
         "model": "spyglass.DataField",
         "pk": 1,
@@ -36,5 +36,4 @@
             "xpath": "/html/body/div[4]/div/div/div[2]/div/div/div/p"
         }
     }
-
 ]
