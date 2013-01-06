@@ -1,6 +1,6 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
-from tastypie.resources import ALL, ALL_WITH_RELATIONS
+#from tastypie.resources import ALL, ALL_WITH_RELATIONS
 from tastypie.validation import Validation
 from tastypie.authentication import Authentication
 from tastypie.authentication import ApiKeyAuthentication
@@ -22,7 +22,7 @@ class SiteResource(ModelResource):
 
 
 class PathsResource(ModelResource):
-    site = fields.ForeignKey(SiteResource,'site',full=False)
+    site = fields.ForeignKey(SiteResource, 'site', full=False)
     class Meta:
         queryset = DataField.objects.all()
         resource_name = "paths"
@@ -34,7 +34,7 @@ class PathsResource(ModelResource):
 
 class QueryResource(ModelResource):
     class Meta:
-        queryset = Query.objects.order_by('date')
+        queryset = Query.objects.order_by('next_check')
         resource_name = 'query'
 
         allowed_methods = ['get','patch']

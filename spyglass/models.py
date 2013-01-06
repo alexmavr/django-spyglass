@@ -2,42 +2,57 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from tastypie.models import create_api_key
+import datetime
 
 # Auto generate Api Key on user creation
 models.signals.post_save.connect(create_api_key, sender=User)
 
-# note: Site.datafields.all() should work
 class Site(models.Model):
-    name = models.CharField(max_length=150, blank=False, verbose_name="Site Name")
+    name = models.CharField(max_length=150, blank=False,
+                                    verbose_name="Site Name")
     url = models.URLField(max_length=400, blank=False, verbose_name="Site URL")
-    poll_time = models.IntegerField(blank=False, verbose_name="Polling time in minutes")
+    poll_time = models.IntegerField(blank=False,
+                                    verbose_name="Polling time in minutes")
 
     def __unicode__(self):
         return self.name
 
 class DataField(models.Model):
-    site = models.ForeignKey(Site, verbose_name="Site", related_name="datafields_set")
-    field_name = models.CharField(max_length=150, blank=False, verbose_name="Field Name")
+    site = models.ForeignKey(Site, verbose_name="Site",
+                                 related_name="datafields_set")
+    field_name = models.CharField(max_length=150, blank=False,
+                                  verbose_name="Field Name")
     xpath = models.CharField(max_length=150, blank=False, verbose_name="XPath")
-        # Add support for different parsers? (beautiful soup pl0x)
 
     def __unicode__(self):
-        return self.site.name
+        return self.field_name
 
 
 class Query(models.Model):
-    email = models.EmailField(blank=False, verbose_name="User Email")
+    user = models.ForeignKey(User)
     site = models.ForeignKey(Site, verbose_name="Site")
-    completed = models.BooleanField(default=False, blank=False, verbose_name="Completed")
+    completed = models.BooleanField(default=False, blank=False,
+                                    verbose_name="Completed")
+    params = models.CharField(max_length=200, blank=False,
+                                    verbose_name="Query Parameters")
+    next_check = models.DateTimeField(auto_now_add=True, verbose_name="Next check")
+
+    def save(self, *args, **kwargs):
+        self.next_check = datetime.datetime.now() + datetime.timedelta(
+                    minutes=self.site.poll_time)
+        super(Query, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.email
+        return self.params
 
 
 class Crawler(models.Model):
-    api_key = models.CharField(max_length=100, primary_key=True, verbose_name="Crawler Api Key")
-    last_seen = models.DateTimeField(auto_now=True, auto_now_add=True, verbose_name="Last Seen At")
-    trust_level = models.IntegerField(default=10, blank=False, verbose_name="Trust Level")
+    api_key = models.CharField(max_length=100, primary_key=True,
+                                   verbose_name="Crawler Api Key")
+    last_seen = models.DateTimeField(auto_now=True, auto_now_add=True,
+                                     verbose_name="Last Seen At")
+    trust_level = models.IntegerField(default=10, blank=False,
+                                      verbose_name="Trust Level")
 
     def __unicode__(self):
         return self.api_key
