@@ -117,7 +117,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'spyglass',
-    'example.core',
+    'core',
 )
 
 # A sample logging configuration. The only tangible logging
