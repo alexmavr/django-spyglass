@@ -33,7 +33,7 @@
     <div class="container">
         <div class="row">
                 <div class="span6 offset3" style="text-align: center">
-                  <a href="/"><img src="{% static "img/news.jpg" %}" alt="The News Spyglass" height="10"></a>
+                  <a href="/"><img src="{% static "img/news.jpg" %}" alt="The News Spyglass" width="300"></a>
                 </div>
                 <ul class="nav nav-pills">
             {% comment %}
@@ -54,7 +54,6 @@
                     <li><a href="{% url 'account_login' %}">Login</a></li>
                     <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
                     {% endif %}
-
             {% endcomment %}
                 </ul>
         </div>

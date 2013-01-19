@@ -1,23 +1,14 @@
+import datetime
+from django.utils.timezone import now
 from django.db import models
-from django.conf import settings
 from django.contrib.auth.models import User
 from tastypie.models import create_api_key
-import datetime
+from .common import get_meta
 
 # Auto generate Api Key on user creation
 models.signals.post_save.connect(create_api_key, sender=User)
 
-
-def get_meta():
-    package = ".".join(settings.METAMODEL.split('.')[:-1])
-    modelclass = settings.METAMODEL.split('.')[-1]
-    Metamodel = __import__(package, globals(),locals(), [modelclass], -1)
-    Metamodel = eval("Metamodel." + modelclass)
-    return Metamodel
-
 Metamodel = get_meta()
-
-
 
 class Site(models.Model):
     name = models.CharField(max_length=150, blank=False,
@@ -54,7 +45,7 @@ class Query(models.Model):
     last_mod = models.DateTimeField(blank=True, verbose_name="Last Modified")
 
     def save(self, *args, **kwargs):
-        self.next_check = datetime.datetime.now() + datetime.timedelta(
+        self.next_check = now() + datetime.timedelta(
                     minutes=self.site.poll_time)
         super(Query, self).save(*args, **kwargs)
 

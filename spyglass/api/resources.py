@@ -5,26 +5,15 @@ from tastypie.validation import Validation
 from tastypie.authentication import Authentication
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.authorization import Authorization
-from spyglass.models import Crawler
-from spyglass.models import Site
-from spyglass.models import DataField
-from spyglass.models import Query
-
-from django.conf import settings
-
-# import the developer's model from METAMODEL
-def get_meta():
-    package = ".".join(settings.METAMODEL.split('.')[:-1])
-    modelclass = settings.METAMODEL.split('.')[-1]
-    Metamodel = __import__(package, globals(),locals(), [modelclass], -1)
-    Metamodel = eval("Metamodel." + modelclass)
-    return Metamodel
-
-Metamodel = get_meta()
+from ..models import Crawler
+from ..models import Site
+from ..models import DataField
+from ..models import Query
+from ..common import get_meta
 
 class MetaResource(ModelResource):
     class Meta:
-        queryset = Metamodel.objects.all()
+        queryset = get_meta().objects.all()
         resource_name = 'meta'
         allowed_methods = ['get','post','patch']
 
@@ -35,7 +24,7 @@ class MetaResource(ModelResource):
 
 class SiteResource(ModelResource):
     class Meta:
-        queryset = Site.objects.all()
+        queryset = Site.objects.select_related().all()
         resource_name = 'site'
         allowed_methods = ['get']
 
@@ -53,6 +42,7 @@ class PathsResource(ModelResource):
         validation = Validation()
         authentication = Authentication()
         authorization = Authorization()
+        fields = ('xpath', 'site', 'field_name')
 
 
 class QueryResource(ModelResource):
@@ -67,6 +57,14 @@ class QueryResource(ModelResource):
         validation = Validation()
         authentication = Authentication()
         authorization = Authorization()
+
+    # Save all objects to update their timestamps before sending them
+    def obj_get_list(self, request=None, **kwargs):
+        items = super(QueryResource, self).obj_get_list(self, **kwargs)
+        for item in items:
+            item.save()
+        return items
+
 
 class CrawlerResource(ModelResource):
     class Meta:
