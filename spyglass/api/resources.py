@@ -15,7 +15,7 @@ class MetaResource(ModelResource):
     class Meta:
         queryset = get_meta().objects.all()
         resource_name = 'meta'
-        allowed_methods = ['get','post','patch']
+        allowed_methods = ['get','post','put']
 
         validation = Validation()
         authentication = Authentication()
