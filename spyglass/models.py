@@ -1,4 +1,4 @@
-import datetime
+from datetime import timedelta
 from django.utils.timezone import now
 from django.db import models
 from django.contrib.auth.models import User
@@ -45,7 +45,7 @@ class Query(models.Model):
     last_mod = models.DateTimeField(blank=True, verbose_name="Last Modified")
 
     def save(self, *args, **kwargs):
-        self.next_check = now() + datetime.timedelta(
+        self.next_check = now() + timedelta(
                     minutes=self.site.poll_time)
         super(Query, self).save(*args, **kwargs)
 

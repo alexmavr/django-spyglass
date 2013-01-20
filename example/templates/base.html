@@ -30,9 +30,7 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-                <div class="span6 offset3" style="text-align: center">
+                <div class="span4 offset4" style="text-align: center">
                   <a href="/"><img src="{% static "img/news.jpg" %}" alt="The News Spyglass" width="300"></a>
                 </div>
                 <ul class="nav nav-pills">
@@ -56,18 +54,9 @@
                     {% endif %}
             {% endcomment %}
                 </ul>
-        </div>
-
-                <div class="span10 offset1" style="text-align: center">
-                    <br>
-                    <div class="well">
-                        {% block content %}{% endblock %}
-                    </div>
-                </div>
-    </div>
+            {% block content %}{% endblock %}
         <!-- Footer
         ================================================== -->
-        <div class="container">
             <footer class="footer" style="text-align: center">
             <p><small>
                     <a href="/">Search</a> | 
@@ -75,8 +64,6 @@
                     <a href="/accounts/login/">Login</a> | 
                     <a href="/policy/">Usage Policy</a> 
             </small></p>
-            <small>Submitting a request or creating an account requires that you agree to our <a href="/policy">Usage Policy</a></small>
             </footer>
-        </div>
 </body>
 </html>

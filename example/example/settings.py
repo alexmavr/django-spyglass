@@ -104,7 +104,8 @@ ROOT_URLCONF = 'example.urls'
 WSGI_APPLICATION = 'example.wsgi.application'
 
 TEMPLATE_DIRS = (
-    PROJECT_ROOT.child('templates')
+    PROJECT_ROOT.child('templates'),
+    PROJECT_ROOT.child('spyglass').child('templates')
 )
 
 INSTALLED_APPS = (
