@@ -18,19 +18,14 @@ def receive_query(request):
 
             # Add user to Query or create a new user
             mail = form.data['email']
-            existing = User.objects.get(email=mail)
-            if existing:
-                query.user = existing
-            else:
-                query.user = User.objects.create_user(mail.split('@')[0],
-                                                      mail,
-                                                      mail + 'pass')
-            # Initialize misc Query fields
+            query.user, created = User.objects.get_or_create(email=mail,
+                            defaults={'username':mail.split('@')[0],
+                                      'password':mail.split('@')[0] +'pass'
+                                     })
             query.completed = False
             query.result = None
             query.last_mod = now()
-
             query.save()
-            return render_to_response('messages/thanks.html')
+            return redirect('thanks')
     return redirect('/')
 

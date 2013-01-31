@@ -1,5 +1,6 @@
 from django.db import models
 
+# The Developer's model. Spyglass will populate it with its results
 class NewsStory(models.Model):
     headline = models.CharField(max_length=200, blank=False)
     category = models.CharField(max_length=200, blank=False)
