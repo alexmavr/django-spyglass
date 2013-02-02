@@ -8,6 +8,7 @@ from .common import get_meta
 # Auto generate Api Key on user creation
 models.signals.post_save.connect(create_api_key, sender=User)
 
+# The developer class to be populated by spyglass
 Metamodel = get_meta()
 
 class Site(models.Model):

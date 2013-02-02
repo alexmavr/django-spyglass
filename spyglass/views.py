@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render_to_response
 from django.shortcuts import redirect
 from django.utils.timezone import now
 from .forms import QueryForm

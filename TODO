@@ -1,0 +1,18 @@
+spyglass:
+    views:
+        secure the password of the anonymous users
+        add anonymous users to a group (for management)
+
+        set automatic user addition as configurable on dev's settings.py
+            something like ONLY_AUTHORIZED_QUERIES should do
+            if true, receive_query should be decorated @login_required and
+            only permit queries linked to active user
+            
+    models:
+        test method overrides
+
+    apis:
+        test all apis
+
+example:
+    
