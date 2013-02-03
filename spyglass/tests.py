@@ -48,11 +48,11 @@ class ReceiveQueryViewTestCase(TestCase):
         query = Query.objects.get(params='query text')
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(query.user, request.user);
-        self.assertEqual(query.params, request.POST['params']);
+        self.assertEqual(query.user, request.user)
+        self.assertEqual(query.params, request.POST['params'])
         self.assertEqual(query.result, None)
         self.assertEqual(query.completed, False)
-        self.assertEqual(query.site.pk, 1);
+        self.assertEqual(query.site.pk, 1)
 
     # Adds query with a different email than the user's
     #   should create a new user with that email
@@ -68,15 +68,16 @@ class ReceiveQueryViewTestCase(TestCase):
         query = Query.objects.get(params='query text')
 
         self.assertEqual(response.status_code, 302)
-        self.assertNotEqual(query.user, request.user);
+        self.assertNotEqual(query.user, request.user)
         self.assertEqual(query.user.email, 'othermail@gmail.com')
         self.assertEqual(query.user.username, 'othermail')
-        self.assertEqual(query.params, request.POST['params']);
+        self.assertEqual(query.params, request.POST['params'])
         self.assertEqual(query.result, None)
         self.assertEqual(query.completed, False)
         self.assertEqual(query.site.pk, site.pk)
         self.assertGreater(now(), query.last_mod)
 
+# Testcase for Query model
 class QueryModelTestCase(TestCase):
     def test_save(self):
         q = Query.objects.create(user=create_user(),
