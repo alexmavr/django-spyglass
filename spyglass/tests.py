@@ -2,21 +2,33 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test.client import RequestFactory
+from django.utils.timezone import now
 from .views import receive_query
 from .models import Query
+from .models import Site
 
-# User Model Factory
+# Model Factories
 def create_user(**kwargs):
     defaults = {
-        "username": "afein",
-        "password": "dummy",
-        "email": "default@gmail.com"
+        'username': 'afein',
+        'password': 'dummy',
+        'email': 'default@gmail.com'
     }
     defaults.update(kwargs)
     return User.objects.create(**defaults)
 
+def create_site(**kwargs):
+    defaults = {
+        'name': 'dummy site',
+        'url': 'http://dummysite.org',
+        'poll_time': 10
+    }
+    defaults.update(kwargs)
+    return Site.objects.create(**defaults)
 
-class SpyglassViewsTestCase(TestCase):
+
+# Testcase for receive_query
+class ReceiveQueryViewTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
@@ -30,11 +42,10 @@ class SpyglassViewsTestCase(TestCase):
         request = self.factory.post(reverse('receive_query'))
         request.user = create_user()
         request.POST = { 'params':'query text',
-                        'email': request.user.email,
-                        'site': 1,
+                        'email': request.user.email, 'site': 1,
                         'persistent':True }
         response = receive_query(request)
-        query = Query.objects.get(params="query text")
+        query = Query.objects.get(params='query text')
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(query.user, request.user);
@@ -48,12 +59,13 @@ class SpyglassViewsTestCase(TestCase):
     def test_POST_new_user(self):
         request = self.factory.post(reverse('receive_query'))
         request.user = create_user()
+        site = create_site()
         request.POST = { 'params':'query text',
                         'email': 'othermail@gmail.com',
-                        'site': 1,
+                        'site': site.pk,
                         'persistent':True }
         response = receive_query(request)
-        query = Query.objects.get(params="query text")
+        query = Query.objects.get(params='query text')
 
         self.assertEqual(response.status_code, 302)
         self.assertNotEqual(query.user, request.user);
@@ -62,5 +74,21 @@ class SpyglassViewsTestCase(TestCase):
         self.assertEqual(query.params, request.POST['params']);
         self.assertEqual(query.result, None)
         self.assertEqual(query.completed, False)
-        self.assertEqual(query.site.pk, 1);
+        self.assertEqual(query.site.pk, site.pk)
+        self.assertGreater(now(), query.last_mod)
+
+class QueryModelTestCase(TestCase):
+    def test_save(self):
+        q = Query.objects.create(user=create_user(),
+                                 site=create_site(),
+                                 result=None,
+                                 completed=False,
+                                 persistent=True,
+                                 params='save test',
+                                 last_mod=now())
+        prev_time = q.next_check
+        q.save()
+        assert q.next_check > now()
+        assert q.next_check > prev_time
+
 
