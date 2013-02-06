@@ -150,3 +150,5 @@ LOGGING = {
 }
 
 METAMODEL = 'core.models.NewsStory'
+SPYGLASS_AUTHORIZED_QUERIES = False
+SPYGLASS_ADD_USERS = True

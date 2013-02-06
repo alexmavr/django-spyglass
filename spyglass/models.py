@@ -3,7 +3,7 @@ from django.utils.timezone import now
 from django.db import models
 from django.contrib.auth.models import User
 from tastypie.models import create_api_key
-from .common import get_meta
+from .utils import get_meta
 
 # Auto generate Api Key on user creation
 models.signals.post_save.connect(create_api_key, sender=User)

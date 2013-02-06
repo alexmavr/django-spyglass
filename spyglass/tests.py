@@ -6,6 +6,8 @@ from django.utils.timezone import now
 from .views import receive_query
 from .models import Query
 from .models import Site
+from .app_settings import SPYGLASS_AUTHORIZED_QUERIES
+from .app_settings import SPYGLASS_ADD_USERS
 
 # Model Factories
 def create_user(**kwargs):
@@ -32,13 +34,13 @@ class ReceiveQueryViewTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
-    # GET should just redirect to root
+
     def test_GET_index(self):
         resp = self.client.get(reverse('receive_query'))
         self.assertEqual(resp.status_code, 302)
 
     # Adds query with the email of the active user
-    def test_POST_old_user(self):
+    def test_POST_accept_old_user(self):
         request = self.factory.post(reverse('receive_query'))
         request.user = create_user()
         request.POST = { 'params':'query text',
@@ -55,8 +57,7 @@ class ReceiveQueryViewTestCase(TestCase):
         self.assertEqual(query.site.pk, 1)
 
     # Adds query with a different email than the user's
-    #   should create a new user with that email
-    def test_POST_new_user(self):
+    def test_POST_accept_new_user(self):
         request = self.factory.post(reverse('receive_query'))
         request.user = create_user()
         site = create_site()
@@ -76,6 +77,11 @@ class ReceiveQueryViewTestCase(TestCase):
         self.assertEqual(query.completed, False)
         self.assertEqual(query.site.pk, site.pk)
         self.assertGreater(now(), query.last_mod)
+
+    # Adds query with a different email than the user's
+    def test_POST_decline_new_user(self):
+        SPYGLASS_AUTHORIZED_QUERIES = False
+        SPYGLASS_NEW_USERS = True
 
 # Testcase for Query model
 class QueryModelTestCase(TestCase):

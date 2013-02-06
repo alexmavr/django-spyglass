@@ -9,7 +9,7 @@ from ..models import Crawler
 from ..models import Site
 from ..models import DataField
 from ..models import Query
-from ..common import get_meta
+from ..utils import get_meta
 
 class MetaResource(ModelResource):
     class Meta:
