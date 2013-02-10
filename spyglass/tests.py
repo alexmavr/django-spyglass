@@ -3,11 +3,10 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test.client import RequestFactory
 from django.utils.timezone import now
+from django.conf import settings
 from .views import receive_query
 from .models import Query
 from .models import Site
-from .app_settings import SPYGLASS_AUTHORIZED_QUERIES
-from .app_settings import SPYGLASS_ADD_USERS
 
 # Model Factories
 def create_user(**kwargs):
@@ -33,14 +32,22 @@ def create_site(**kwargs):
 class ReceiveQueryViewTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
+        self.old_authorized_queries = settings.SPYGLASS_AUTHORIZED_QUERIES
+        self.old_add_user = settings.SPYGLASS_ADD_USERS
 
+    def tearDown(self):
+        settings.SPYGLASS_AUTHORIZED_QUERIES = self.old_authorized_queries
+        settings.SPYGLASS_ADD_USERS = self.old_add_user
 
+    # simple GET of receive_query
     def test_GET_index(self):
         resp = self.client.get(reverse('receive_query'))
         self.assertEqual(resp.status_code, 302)
 
-    # Adds query with the email of the active user
+    # Adds a query with the email of the active user
     def test_POST_accept_old_user(self):
+        settings.SPYGLASS_AUTHORIZED_QUERIES = False
+        settings.SPYGLASS_NEW_USERS = True
         request = self.factory.post(reverse('receive_query'))
         request.user = create_user()
         request.POST = { 'params':'query text',
@@ -57,7 +64,10 @@ class ReceiveQueryViewTestCase(TestCase):
         self.assertEqual(query.site.pk, 1)
 
     # Adds query with a different email than the user's
+    # Should create a new user
     def test_POST_accept_new_user(self):
+        settings.SPYGLASS_AUTHORIZED_QUERIES = False
+        settings.SPYGLASS_NEW_USERS = True
         request = self.factory.post(reverse('receive_query'))
         request.user = create_user()
         site = create_site()
@@ -80,8 +90,8 @@ class ReceiveQueryViewTestCase(TestCase):
 
     # Adds query with a different email than the user's
     def test_POST_decline_new_user(self):
-        SPYGLASS_AUTHORIZED_QUERIES = False
-        SPYGLASS_NEW_USERS = True
+        settings.SPYGLASS_AUTHORIZED_QUERIES = False
+        settings.SPYGLASS_NEW_USERS = False
 
 # Testcase for Query model
 class QueryModelTestCase(TestCase):
@@ -95,7 +105,7 @@ class QueryModelTestCase(TestCase):
                                  last_mod=now())
         prev_time = q.next_check
         q.save()
-        assert q.next_check > now()
-        assert q.next_check > prev_time
+        self.assertGreater(q.next_check, now())
+        self.assertGreater(q.next_check, prev_time)
 
 
