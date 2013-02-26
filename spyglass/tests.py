@@ -75,6 +75,7 @@ class ReceiveQueryViewTestCase(TestCase):
                         'email': 'othermail@gmail.com',
                         'site': site.pk,
                         'persistent':True }
+
         response = receive_query(request)
         query = Query.objects.get(params='query text')
 
@@ -92,6 +93,20 @@ class ReceiveQueryViewTestCase(TestCase):
     def test_POST_decline_new_user(self):
         settings.SPYGLASS_AUTHORIZED_QUERIES = False
         settings.SPYGLASS_NEW_USERS = False
+
+    def test_POST_decline_unauthorized(self):
+        settings.SPYGLASS_AUTHORIZED_QUERIES = True
+        request = self.factory.post(reverse('receive_query'))
+        request.POST = { 'params':'not created',
+                        'email': 'nonexistant@gmail.com',
+                        }
+
+        response = receive_query(request)
+
+        self.assertEqual(response.status_code, 302)
+        with self.assertRaises(Query.DoesNotExist):
+            Query.objects.get(params='not created')
+
 
 # Testcase for Query model
 class QueryModelTestCase(TestCase):

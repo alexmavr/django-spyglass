@@ -3,10 +3,7 @@ spyglass:
         secure the password of the anonymous users
         optionally add anonymous users to a group (for management)
 
-        set automatic user addition as configurable on dev's settings.py
-            fill in view control of settings flags
-            complete unit tests on the settings flags
-            test and fix the default values
+        complete unit tests on the settings flags
             
     models:
         test method overrides
@@ -15,4 +12,8 @@ spyglass:
         test all apis
 
 example:
-    
+    visual frontend
+
+
+crawlie:
+    crawlie
