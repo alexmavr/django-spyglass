@@ -2,8 +2,10 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test.client import RequestFactory
-from django.utils.timezone import now
+from django.test.utils import override_settings
+from django.contrib.auth.models import AnonymousUser
 from django.conf import settings
+from django.utils.timezone import now
 from .views import receive_query
 from .models import Query
 from .models import Site
@@ -32,12 +34,12 @@ def create_site(**kwargs):
 class ReceiveQueryViewTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        self.old_authorized_queries = settings.SPYGLASS_AUTHORIZED_QUERIES
-        self.old_add_user = settings.SPYGLASS_ADD_USERS
+        self._old_authorized_queries = settings.SPYGLASS_AUTHORIZED_QUERIES
+        self._old_add_user = settings.SPYGLASS_ADD_USERS
 
     def tearDown(self):
-        settings.SPYGLASS_AUTHORIZED_QUERIES = self.old_authorized_queries
-        settings.SPYGLASS_ADD_USERS = self.old_add_user
+        settings.SPYGLASS_AUTHORIZED_QUERIES = self._old_authorized_queries
+        settings.SPYGLASS_ADD_USERS = self._old_add_user
 
     # simple GET of receive_query
     def test_GET_index(self):
@@ -45,9 +47,7 @@ class ReceiveQueryViewTestCase(TestCase):
         self.assertEqual(resp.status_code, 302)
 
     # Adds a query with the email of the active user
-    def test_POST_accept_old_user(self):
-        settings.SPYGLASS_AUTHORIZED_QUERIES = False
-        settings.SPYGLASS_NEW_USERS = True
+    def test_accept_old_user(self):
         request = self.factory.post(reverse('receive_query'))
         request.user = create_user()
         request.POST = { 'params':'query text',
@@ -64,10 +64,9 @@ class ReceiveQueryViewTestCase(TestCase):
         self.assertEqual(query.site.pk, 1)
 
     # Adds query with a different email than the user's
-    # Should create a new user
-    def test_POST_accept_new_user(self):
-        settings.SPYGLASS_AUTHORIZED_QUERIES = False
-        settings.SPYGLASS_NEW_USERS = True
+    ### Creates the user if he doesnt exist
+    @override_settings(SPYGLASS_ADD_USERS = True)
+    def test_create_user(self):
         request = self.factory.post(reverse('receive_query'))
         request.user = create_user()
         site = create_site()
@@ -89,24 +88,38 @@ class ReceiveQueryViewTestCase(TestCase):
         self.assertEqual(query.site.pk, site.pk)
         self.assertGreater(now(), query.last_mod)
 
-    # Adds query with a different email than the user's
-    def test_POST_decline_new_user(self):
-        settings.SPYGLASS_AUTHORIZED_QUERIES = False
-        settings.SPYGLASS_NEW_USERS = False
-
-    def test_POST_decline_unauthorized(self):
-        settings.SPYGLASS_AUTHORIZED_QUERIES = True
+    # Decline anonymous users
+    @override_settings(SPYGLASS_AUTHORIZED_QUERIES = True)
+    def test_decline_anonymous(self):
         request = self.factory.post(reverse('receive_query'))
-        request.POST = { 'params':'not created',
-                        'email': 'nonexistant@gmail.com',
-                        }
+        request.user = AnonymousUser()
+        site = create_site()
+        request.POST = { 'params':'anonymous query',
+                        'email': 'othermail@gmail.com',
+                        'site': site.pk,
+                        'persistent':True }
 
         response = receive_query(request)
-
         self.assertEqual(response.status_code, 302)
         with self.assertRaises(Query.DoesNotExist):
-            Query.objects.get(params='not created')
+            query = Query.objects.get(params='anonymous query')
 
+    ### Dont add users and return 401 ###
+    @override_settings(SPYGLASS_ADD_USERS = False)
+    def test_decline_unauthorized(self):
+        request = self.factory.post(reverse('receive_query'))
+        request.user = create_user()
+        site = create_site()
+        otheruser = create_user(**{'username':'otheruser',
+                                 'email':'othermail@mail.com'})
+        request.POST = { 'params': 'not created',
+                        'email': otheruser.email,
+                        'site': site.pk,
+                        'persistent': True }
+        response = receive_query(request)
+        self.assertEqual(response.status_code, 401)
+        with self.assertRaises(Query.DoesNotExist):
+            Query.objects.get(params='not created')
 
 # Testcase for Query model
 class QueryModelTestCase(TestCase):
@@ -122,5 +135,4 @@ class QueryModelTestCase(TestCase):
         q.save()
         self.assertGreater(q.next_check, now())
         self.assertGreater(q.next_check, prev_time)
-
 
