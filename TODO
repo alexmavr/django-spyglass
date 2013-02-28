@@ -1,19 +1,14 @@
 spyglass:
     views:
-        secure the password of the anonymous users
         optionally add anonymous users to a group (for management)
-
-        complete unit tests on the settings flags
-            
-    models:
-        test method overrides
-
     apis:
         test all apis
 
 example:
-    visual frontend
+    complete visual looks
 
+backend:
+    finish notifications
 
 crawlie:
-    crawlie
+    crawlie wootwoot

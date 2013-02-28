@@ -1,17 +1,14 @@
 from django.conf import settings
-from .app_settings import authorized
 
-# Usage: @conditional_decorator(decorator, condition)
-# Condition is a string to be evaluated at each call
-class authorization_decorator(object):
-    def __init__(self, dec):
-        self.decorator = dec
+def add_users():
+    return getattr(settings, 'SPYGLASS_ADD_USERS', False)
 
-    def __call__(self, func):
-        if authorized:
-            return self.decorator(func)
-        else:
-            return func
+def conditionally(dec, cond):
+     def resdec(f):
+         if not cond:
+             return f
+         return dec(f)
+     return resdec
 
 # Receive the metamodel class from settings.METAMODEL
 def get_meta():
