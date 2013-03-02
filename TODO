@@ -1,14 +1,10 @@
-spyglass:
-    views:
-        optionally add anonymous users to a group (for management)
-    apis:
-        test all apis
+apis:
+    test all apis
+    reset ApiKeyAuthentication
 
 example:
-    complete visual looks
+    complete epic looks
 
 backend:
     finish notifications
-
-crawlie:
-    crawlie wootwoot
+    generic message queue?

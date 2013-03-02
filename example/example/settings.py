@@ -149,6 +149,13 @@ LOGGING = {
     }
 }
 
+#===============  SPYGLASS Settings ====================#
+
+# Declare the model you wish spyglass to populate.
 METAMODEL = 'core.models.NewsStory'
+
+# Require login to submit queries to spyglass (default=True)
 SPYGLASS_AUTHORIZED_QUERIES = False
+
+# Create a user for every new email submitted to spyglass (default=False)
 SPYGLASS_ADD_USERS = True
