@@ -104,12 +104,12 @@ ROOT_URLCONF = 'example.urls'
 WSGI_APPLICATION = 'example.wsgi.application'
 
 
-TEMPLATE_CONTEXT_PROCESSORS = (                                                 
-  'django.contrib.auth.context_processors.auth',                                
-  'django.core.context_processors.request',                                     
-  'allauth.account.context_processors.account',                                                                                                                                               
-  'allauth.socialaccount.context_processors.socialaccount',                     
-)          
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.request',
+    'allauth.account.context_processors.account',
+    'allauth.socialaccount.context_processors.socialaccount',
+)
 
 TEMPLATE_DIRS = (
     PROJECT_ROOT.child('templates'),
@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django_tables2',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -173,12 +174,12 @@ SPYGLASS_AUTHORIZED_QUERIES = False
 SPYGLASS_ADD_USERS = True
 
 
-ACCOUNT_AUTHENTICATION_METHOD = "email"                                         
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3                                      
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = False
-ACCOUNT_UNIQUE_EMAIL = True                                                     
-ACCOUNT_USERNAME_REQUIRED = False                                               
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "News Spyglass"
 
 
