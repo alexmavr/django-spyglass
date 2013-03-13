@@ -18,6 +18,6 @@ def landing(request):
 
 def profile(request):
     data = ProfileTable(Query.objects.filter(user=request.user))
-    RequestConfig(request).configure(data)
+    RequestConfig(request, paginate={"per_page": 25}).configure(data)
     return render_to_response("profile.html",locals(),
                               context_instance=RequestContext(request))

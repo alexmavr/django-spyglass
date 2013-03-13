@@ -3,8 +3,10 @@ apis:
     reset ApiKeyAuthentication
 
 example:
-    complete epic looks
+    allauth: permit user creation without email verification
+    profile: add edit view, fix edit/delete buttons
+    admin panel: port to spyglass app
+    
 
 backend:
-    finish notifications
-    generic message queue?
+    completion notifications (generic message queue vs email)

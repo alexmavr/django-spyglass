@@ -2,18 +2,16 @@
 {% load url from future %}
 
 {% block content %}
+    </div>
     <div class="row">
-      <div class="span4 offset4 well" style="text-align: center">
+      <div class="span4 offset2 well" style="text-align: center">
           <h4 >Waiting for a news story?</h4><br>
           <p><strong>1.</strong> Tell us something to look for</p>
           <p><strong>2.</strong> Pick your favorite news site</p>
           <p><strong>3.</strong> We'll let you know when something shows up</p>
       </div>
-    </div>
 
-
-    <div class="row">
-      <div class="span4 offset4 well well-large" style="text-align:center">
+      <div class="span4 well well-large" style="text-align:center">
           {% if error %}
           <div class="offset1 span4 row alert alert-block alert-error">
               <h4>Warning!</h4>
@@ -31,4 +29,5 @@
           <p><small>Want more options? <a href="/accounts/signup">Create an account</a></small></p>
       </div>
     </div>
+    <div>
 {% endblock %}
