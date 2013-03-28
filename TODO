@@ -1,12 +1,19 @@
-apis:
+frontend:
+    set background, grid relocations, area coloring
+
+tastypie:
     test all apis
-    reset ApiKeyAuthentication
 
 example:
-    allauth: permit user creation without email verification
-    profile: add edit view, fix edit/delete buttons
-    admin panel: port to spyglass app
-    
+    allauth: fix login bug (incorrect password/email)
+    account profile: add edit query and delete query views
+    admin panel: test
 
 backend:
-    completion notifications (generic message queue vs email)
+    completion notifications? (generic message queue vs email)
+
+crawlie:
+    test for new content?
+
+deployment:
+    set ApiKeyAuthentication
