@@ -14,5 +14,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include(spyglass.urls)),
     url(r'^accounts/', include(allauth.urls)),
-    url(r'^profile/', profile, name="profile"),
+    url(r'^accounts/profile/', profile, name="profile"),
 )
