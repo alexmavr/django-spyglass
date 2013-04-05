@@ -5,6 +5,7 @@ from core.views import thanks
 from core.views import profile
 import spyglass.urls
 
+
 import allauth.urls
 admin.autodiscover()
 
@@ -15,4 +16,6 @@ urlpatterns = patterns('',
     url(r'^', include(spyglass.urls)),
     url(r'^accounts/', include(allauth.urls)),
     url(r'^accounts/profile/', profile, name="profile"),
+    url(r'^accounts/edit/(?P<rqid>\d+)/', 'core.views.edit'),
+    url(r'^accounts/delete/(?P<rqid>\d+)/', 'core.views.delete'),
 )

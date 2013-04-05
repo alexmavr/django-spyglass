@@ -10,3 +10,10 @@ class QueryForm(ModelForm):
     class Meta:
         model = Query
         fields = ('params','site','persistent')
+
+class EditQueryForm(ModelForm):
+    params = CharField(label='What are you looking for?')
+
+    class Meta:
+        model = Query
+        fields = ('params','site','persistent')

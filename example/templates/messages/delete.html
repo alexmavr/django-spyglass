@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+    <script language="javascript">
+        <!--
+        window.onload = redirect("/accounts/profile",3500)
+        //-->
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="pull-right">
+            <a href="/accounts/profile/"><i class="icon-arrow-left"></i> Back to My Searches</a>
+        </div>
+        <br>
+
+    <div class="alert alert-danger">
+        <h3>Your query has been deleted</h3>
+    </div>
+    <small>You are being redirected back to our home page</small>
+    <br>
+{% endblock %}
