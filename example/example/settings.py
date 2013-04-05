@@ -65,11 +65,6 @@ STATIC_ROOT = PROJECT_ROOT.child('static')
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-# Additional locations of static files
-STATICFILES_DIRS = (
-    PROJECT_ROOT.child('assets'),
-)
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -173,6 +168,8 @@ SPYGLASS_AUTHORIZED_QUERIES = False
 # Create a user for every new email submitted to spyglass (default=False)
 SPYGLASS_ADD_USERS = True
 
+# set this to true if you have an admin_panel.html implemented (default=False)
+SPYGLASS_ADMIN_PANEL = True
 
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_VERIFICATION = "none"

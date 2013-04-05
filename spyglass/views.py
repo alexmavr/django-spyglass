@@ -1,20 +1,73 @@
 from django.contrib.auth.models import User
+from django.template import RequestContext
 from django.shortcuts import redirect
+from django.shortcuts import render_to_response
+from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
+from django.utils.timezone import timedelta
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
 from django.conf import settings
+from tastypie.models import ApiKey
 from .forms import QueryForm
 from .utils import add_users
 from .utils import conditionally
+from .models import Crawler
+
+@login_required
+def change_crawlie_access(request, uid, action):
+    if not request.user.is_staff:
+        raise PermissionDenied
+
+    if action == '0':
+        # Delete a crawler and release the Api Key
+        api_key_to_change = get_object_or_404(ApiKey, user_id=uid)
+        crawler_to_delete = get_object_or_404(Crawler, \
+                                            api_key=api_key_to_change.key)
+        crawler_to_delete.delete()
+        api_key_to_change.key = None
+        api_key_to_change.save()
+    elif action == '1':
+        # Create a crawler and assign an Api Key
+        api_key_to_add = get_object_or_404(ApiKey, user_id=uid)
+        new_cr_c = Crawler()
+        new_cr_c.api_key = api_key_to_add.key
+        new_cr_c.next_refresh = now()
+        new_cr_c.save()
+    return redirect('admin_panel')
 
 
-def change_crawlie_access(request):
-    return request
-
+@login_required
 def admin_panel(request):
-    return request
+    if not getattr(settings, settings.SPYGLASS_ADMIN_PANEL, False):
+        raise PermissionDenied
+
+    if not request.user.is_staff:
+        raise PermissionDenied
+
+    final_data = {}
+    for key in ApiKey.objects.all():
+        data = {}
+        data['email'] = key.user.email
+        data['uid'] = key.user.id
+        data['api_key'] = key.key
+        data['able'] = False
+        final_data[key.key] = data
+        time = now()
+    for crawl in Crawler.objects.all():
+        difftime = time - crawl.last_seen
+
+        final_data[crawl.api_key]['last_seen'] = crawl.last_seen
+        final_data[crawl.api_key]['active'] = \
+                            difftime < timedelta(minutes=10)
+        final_data[crawl.api_key]['able'] = True
+    final_data = sorted(final_data.items(), \
+                            key=lambda y: not y[1]['able'])
+        #return HttpResponse(final_data)
+    return render_to_response("admin_panel.html", locals(), \
+                                context_instance=RequestContext(request))
+
 
 # Receive a query from a user
 @conditionally(login_required, getattr(settings,
@@ -25,6 +78,9 @@ def receive_query(request):
         if form.is_valid():
             query = form.save(commit=False)
             mail = form.data['email']
+            if request.user.email != mail:
+                raise PermissionDenied
+
             # If adding new users
             if add_users():
                 #Create the user if he doesnt exist

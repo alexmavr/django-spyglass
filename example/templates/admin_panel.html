@@ -17,10 +17,9 @@
               {% for row in final_data %}
                   <tr 
                       onmouseover="ChangeColor(this,  true);" 
-                      onmouseout="ChangeColor(this,  false);" 
-                      >
+                      onmouseout="ChangeColor(this,  false);" >
 
-                      <td> {{ row.1.email}} </td>
+                      <td> {{ row.1.email }} </td>
                       <td> <i class="btn btn-link" 
                               data-original-title="Api Key" id="{{ row.1.api_key }}" 
                               data-placement="top"
@@ -28,8 +27,7 @@
                               data-animation='true'
                               data-width='400'
                               onClick="$('#{{ row.1.api_key }}').popover('toggle');" 
-                              data-content='{{ row.1.api_key }} '
-                              >{{ row.1.api_key|truncatechars:10 }}</i></td>
+                              data-content='{{ row.1.api_key }} '> {{ row.1.api_key|truncatechars:14 }}</i></td>
                       <td>
                           {% if row.1.able %}
                               <a class="btn btn-block btn-small btn-danger" href="/change/{{ row.1.uid }}/0">Disable</a>
@@ -39,14 +37,14 @@
                       </td>
                       <td  style="text-align:center">
                           {% if row.1.active %}
-                              <div class="btn btn-small btn-success" ><i class="icon-ok icon-white"></i></div>
+                              <i class="btn btn-small btn-success" ><i class="icon-ok icon-white"></i></div>
                           {% else %}
-                              <div class="btn btn-small btn-danger" ><i class="icon-remove icon-white"></i></div>
+                              <i class="btn btn-small btn-danger" ><i class="icon-remove icon-white"></i></div>
                           {% endif %}
                       </td>
                       <td>
-                          {% if row.1.last_heard %}
-                              {{ row.1.last_heard|timesince:now }}
+                          {% if row.1.last_seen %}
+                              {{ row.1.last_seen|timesince:time }}
                           {% endif %}
                       </td>
                   </tr>
