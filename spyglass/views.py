@@ -40,7 +40,7 @@ def change_crawlie_access(request, uid, action):
 
 @login_required
 def admin_panel(request):
-    if not getattr(settings, settings.SPYGLASS_ADMIN_PANEL, False):
+    if not getattr(settings, 'SPYGLASS_ADMIN_PANEL', False):
         raise PermissionDenied
 
     if not request.user.is_staff:
