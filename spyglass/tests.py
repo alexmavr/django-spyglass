@@ -9,6 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from .views import receive_query
 from .views import change_crawlie_access
+from .views import admin_panel
 from .models import Query
 from .models import Crawler
 from .models import Site
@@ -33,8 +34,40 @@ def create_site(**kwargs):
     defaults.update(kwargs)
     return Site.objects.create(**defaults)
 
-# Testcase for admin panel
-class AdminPanelOpsTestcase(TestCase):
+# Testcase for the admin panel
+class AdminPanelTestcase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    # Panel is available only to staff
+    @override_settings(SPYGLASS_ADMIN_PANEL=True)
+    def test_staff_access(self):
+        request = self.factory.get(reverse('admin_panel'))
+        request.user = create_user()
+        request.user.is_staff = False
+        self.assertRaises(PermissionDenied, admin_panel, request)
+
+    # Panel is available only if the flag is True
+    @override_settings(SPYGLASS_ADMIN_PANEL=False)
+    def test_setting_flag(self):
+        request = self.factory.get(reverse('admin_panel'))
+        request.user = create_user()
+        request.user.is_staff = True
+        self.assertRaises(PermissionDenied, admin_panel, request)
+
+    # Normal function scenario
+    def test_normal_function(self):
+        request = self.factory.get(reverse('admin_panel'))
+        request.user = create_user()
+        request.user.is_staff = True
+        response = admin_panel(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed("admin_panel.html")
+
+
+
+# Testcase for changing crawler api access
+class ChangeAccessTestcase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
@@ -184,6 +217,39 @@ class ReceiveQueryViewTestCase(TestCase):
         with self.assertRaises(Query.DoesNotExist):
             Query.objects.get(params='not created')
 
+    # SPYGLASS_ADD_USERS=False
+    # Dont add new user's query and return 403
+    @override_settings(SPYGLASS_ADD_USERS = False)
+    def test_decline_unauthorized_nocreate(self):
+        request = self.factory.post(reverse('receive_query'))
+        request.user = create_user()
+        otheruser = create_user(**{'username':'otheruser',
+                                 'email':'othermail@mail.com'})
+        site = create_site()
+        request.POST = { 'params': 'not created',
+                        'email': otheruser.email,
+                        'site': site.pk,
+                        'persistent': True }
+        with self.assertRaises(PermissionDenied):
+            receive_query(request)
+        with self.assertRaises(Query.DoesNotExist):
+            Query.objects.get(params='not created')
+
+    # SPYGLASS_ADD_USERS=False
+    # Accept a query for the request.user
+    @override_settings(SPYGLASS_ADD_USERS = False)
+    def test_accept_own_query(self):
+        request = self.factory.post(reverse('receive_query'))
+        request.user = create_user()
+        site = create_site()
+        request.POST = { 'params': 'not created',
+                        'email': request.user.email,
+                        'site': site.pk,
+                        'persistent': True }
+        receive_query(request)
+        Query.objects.get(params='not created')
+
+
 # Testcase for Query model
 class QueryModelTestCase(TestCase):
     def test_save(self):
@@ -198,4 +264,3 @@ class QueryModelTestCase(TestCase):
         q.save()
         self.assertGreater(q.next_check, now())
         self.assertGreater(q.next_check, prev_time)
-

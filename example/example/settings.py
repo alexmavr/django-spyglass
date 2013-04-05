@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
     'django_tables2',
+    'django_coverage',
 )
 
 # A sample logging configuration. The only tangible logging

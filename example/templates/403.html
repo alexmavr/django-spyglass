@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block head_title %}Unauthorized{% endblock %}
+
+{% block extra_head %}
+	<script language="javascript">
+	<!--
+		window.onload = setTimeout(function(){window.location="/"},3500)
+	//-->
+	</script>
+{% endblock %}
+
+{% block content %}
+    <h2>Permission Denied</h2>
+    <small>Please be good next time</small>
+    <br>
+{% endblock %}

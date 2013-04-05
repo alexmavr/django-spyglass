@@ -1,9 +1,6 @@
 frontend:
     set background, grid relocations, area coloring
 
-spyglass:
-    unit test admin_panel
-
 tastypie:
     test all apis
 

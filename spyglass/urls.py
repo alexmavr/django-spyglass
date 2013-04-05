@@ -22,5 +22,5 @@ urlpatterns = patterns('',
 	url(r'^api/', include(v1_api.urls)),
 	url(r'^admin_panel/', 'spyglass.views.admin_panel', name='admin_panel'),
 	url(r'^change/(?P<uid>\d+)/(?P<action>\d)/', \
-                'spyglass.views.change_crawlie_access'),
+                'spyglass.views.change_crawlie_access', name='change_access'),
 )
