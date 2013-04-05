@@ -7,7 +7,9 @@ from django.utils.timezone import now
 from django.utils.timezone import timedelta
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.http import Http404
 from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from tastypie.models import ApiKey
 from .forms import QueryForm
@@ -35,6 +37,8 @@ def change_crawlie_access(request, uid, action):
         new_cr_c.api_key = api_key_to_add.key
         new_cr_c.next_refresh = now()
         new_cr_c.save()
+    else:
+        raise Http404
     return redirect('admin_panel')
 
 
@@ -42,7 +46,6 @@ def change_crawlie_access(request, uid, action):
 def admin_panel(request):
     if not getattr(settings, 'SPYGLASS_ADMIN_PANEL', False):
         raise PermissionDenied
-
     if not request.user.is_staff:
         raise PermissionDenied
 
@@ -57,7 +60,6 @@ def admin_panel(request):
         time = now()
     for crawl in Crawler.objects.all():
         difftime = time - crawl.last_seen
-
         final_data[crawl.api_key]['last_seen'] = crawl.last_seen
         final_data[crawl.api_key]['active'] = \
                             difftime < timedelta(minutes=10)
@@ -78,29 +80,27 @@ def receive_query(request):
         if form.is_valid():
             query = form.save(commit=False)
             mail = form.data['email']
-            if request.user.email != mail:
-                raise PermissionDenied
 
-            # If adding new users
+            # If SPYGLASS_ADD_USERS
             if add_users():
-                #Create the user if he doesnt exist
+                # Create the user if he doesnt exist
                 defaults={'username':mail.split('@')[0]}
                 query.user, created = User.objects.get_or_create(email=mail,
                                                              defaults=defaults)
                 if not created and query.user != request.user:
-                    return HttpResponse(status=401)
+                    raise PermissionDenied
             else:
-                # raise http 401 if he's not request.user or doesnt exist
+                # raise Unauthorized if he's not request.user or doesnt exist
                 try:
                     query.user =  User.objects.get(email=mail)
                     if query.user != request.user:
                         raise PermissionDenied
-                except (User.DoesNotExist, PermissionDenied):
-                    return HttpResponse(status=401)
+                except (User.DoesNotExist):
+                    raise PermissionDenied
             query.completed = False
             query.result = None
             query.last_mod = now()
             query.save()
-            return redirect('thanks')
+            return redirect(reverse('thanks'))
     # if form is invalid or request is GET, redirect to /
     return redirect('/')

@@ -5,9 +5,14 @@ from django.test.client import RequestFactory
 from django.test.utils import override_settings
 from django.contrib.auth.models import AnonymousUser
 from django.utils.timezone import now
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from .views import receive_query
+from .views import change_crawlie_access
 from .models import Query
+from .models import Crawler
 from .models import Site
+from tastypie.models import ApiKey
 
 # Model Factories
 def create_user(**kwargs):
@@ -28,8 +33,48 @@ def create_site(**kwargs):
     defaults.update(kwargs)
     return Site.objects.create(**defaults)
 
+# Testcase for admin panel
+class AdminPanelOpsTestcase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
 
-# Testcase for receive_query
+    # Available only to staff
+    def test_staff_access(self):
+        request = self.factory.get(reverse('admin_panel'))
+        request.user = create_user()
+        request.user.is_staff = False
+        self.assertRaises(PermissionDenied, change_crawlie_access, request, \
+                          request.user.id, 1)
+
+    # Consecutive calls of the view with different actions
+    def test_create_and_delete(self):
+        request = self.factory.get(reverse('admin_panel'))
+        request.user = create_user()
+        request.user.is_staff = True
+        key = ApiKey.objects.get(user_id=request.user.id)
+
+        response = change_crawlie_access(request, request.user.id, '1')
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed("admin_panel.html")
+        Crawler.objects.filter(api_key=key.key)
+
+        response = change_crawlie_access(request, request.user.id, '0')
+        with self.assertRaises(Crawler.DoesNotExist):
+            Crawler.objects.get(api_key=key)
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed("admin_panel.html")
+        newkey = ApiKey.objects.get(user_id=request.user.id)
+        self.assertNotEqual(key.key, newkey.key)
+
+    # View should only work for '1' or '0' as action
+    def test_invalid_action(self):
+        request = self.factory.get(reverse('admin_panel'))
+        request.user = create_user()
+        request.user.is_staff = True
+        with self.assertRaises(Http404):
+            change_crawlie_access(request, request.user.id, '4')
+
+
 class ReceiveQueryViewTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
@@ -47,16 +92,17 @@ class ReceiveQueryViewTestCase(TestCase):
                         'email': request.user.email, 'site': 1,
                         'persistent':True }
         response = receive_query(request)
+        response = self.client.get(reverse('receive_query'))
         query = Query.objects.get(params='query text')
 
         self.assertEqual(response.status_code, 302)
+
         self.assertEqual(query.user, request.user)
         self.assertEqual(query.params, request.POST['params'])
         self.assertEqual(query.result, None)
         self.assertEqual(query.completed, False)
         self.assertEqual(query.site.pk, 1)
 
-    # SPYGLASS_ADD_USERS=True
     # Create a query with a new user as another user
     @override_settings(SPYGLASS_ADD_USERS = True)
     def test_user_creation_as_existing(self):
@@ -72,6 +118,7 @@ class ReceiveQueryViewTestCase(TestCase):
         query = Query.objects.get(params='query text')
 
         self.assertEqual(response.status_code, 302)
+        self.assertTemplateUsed(response, 'thanks.html')
         self.assertNotEqual(query.user, request.user)
         self.assertEqual(query.user.email, 'othermail@gmail.com')
         self.assertEqual(query.user.username, 'othermail')
@@ -106,7 +153,7 @@ class ReceiveQueryViewTestCase(TestCase):
         self.assertEqual(query.site.pk, site.pk)
         self.assertGreater(now(), query.last_mod)
 
-    # Dont create a query for another user and return 401
+    # Dont create a query for another user and return 403
     def test_decline_unauthorized(self):
         request = self.factory.post(reverse('receive_query'))
         request.user = create_user()
@@ -117,13 +164,12 @@ class ReceiveQueryViewTestCase(TestCase):
                         'email': otheruser.email,
                         'site': site.pk,
                         'persistent': True }
-        response = receive_query(request)
-        self.assertEqual(response.status_code, 401)
+        self.assertRaises(PermissionDenied, receive_query, request)
         with self.assertRaises(Query.DoesNotExist):
             Query.objects.get(params='not created')
 
     # SPYGLASS_ADD_USERS=False
-    # Dont add new user's query and return 401
+    # Dont add new user's query and return 403
     @override_settings(SPYGLASS_ADD_USERS = False)
     def test_decline_nonexistant(self):
         request = self.factory.post(reverse('receive_query'))
@@ -133,8 +179,8 @@ class ReceiveQueryViewTestCase(TestCase):
                         'email': 'other@mail.com',
                         'site': site.pk,
                         'persistent': True }
-        response = receive_query(request)
-        self.assertEqual(response.status_code, 401)
+        with self.assertRaises(PermissionDenied):
+            receive_query(request)
         with self.assertRaises(Query.DoesNotExist):
             Query.objects.get(params='not created')
 
