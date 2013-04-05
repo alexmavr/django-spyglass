@@ -1,13 +1,11 @@
 frontend:
     set background, grid relocations, area coloring
 
+spyglass:
+    unit test admin_panel
+
 tastypie:
     test all apis
-
-example:
-    allauth: fix login bug (incorrect password/email)
-    account profile: add edit query and delete query views
-    admin panel: test
 
 backend:
     completion notifications? (generic message queue vs email)
