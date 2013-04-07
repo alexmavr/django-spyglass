@@ -46,8 +46,7 @@ class Query(models.Model):
     last_mod = models.DateTimeField(blank=True, verbose_name="Last Modified")
 
     def save(self, *args, **kwargs):
-        self.next_check = now() + timedelta(
-                    minutes=self.site.poll_time)
+        self.next_check = now() + timedelta(minutes=self.site.poll_time)
         super(Query, self).save(*args, **kwargs)
 
     def __unicode__(self):
