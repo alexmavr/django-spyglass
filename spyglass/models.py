@@ -38,7 +38,7 @@ class Query(models.Model):
     result = models.ForeignKey(Metamodel, blank=True, null=True, default=None)
     completed = models.BooleanField(default=False, blank=False,
                                     verbose_name="Completed")
-    persistent = models.BooleanField(default=False, blank=False,
+    persistent = models.BooleanField(default=True, blank=False,
                                     verbose_name="Persistent")
     params = models.CharField(max_length=200, blank=False,
                                     verbose_name="Query Parameters")
