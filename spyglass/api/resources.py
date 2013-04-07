@@ -50,7 +50,7 @@ class QueryResource(ModelResource):
     result = fields.ForeignKey(MetaResource, 'result', null=True, blank=True,
                                full=False)
     class Meta:
-        queryset = Query.objects.order_by('next_check')
+        queryset = Query.objects.filter(completed=False).order_by('next_check')
         resource_name = 'query'
 
         llowed_methods = ['get','patch']
