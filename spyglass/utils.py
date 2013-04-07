@@ -1,8 +1,6 @@
 from django.conf import settings
 
-def add_users():
-    return getattr(settings, 'SPYGLASS_ADD_USERS', False)
-
+# Conditional decorator
 def conditionally(dec, cond):
      def resdec(f):
          if not cond:

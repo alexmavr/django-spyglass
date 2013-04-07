@@ -1,8 +1,8 @@
-from datetime import timedelta
 from django.utils.timezone import now
 from django.db import models
 from django.contrib.auth.models import User
 from tastypie.models import create_api_key
+from datetime import timedelta
 from .utils import get_meta
 
 # Auto generate Api Key on user creation
@@ -45,7 +45,8 @@ class Query(models.Model):
     content_hash = models.CharField(max_length=70, blank=True, default="",
                                     verbose_name="Previous Content Hash")
 
-    next_check = models.DateTimeField(auto_now_add=True, verbose_name="Next check")
+    next_check = models.DateTimeField(auto_now_add=True, \
+                                        verbose_name="Next check")
     last_mod = models.DateTimeField(blank=True, verbose_name="Last Modified")
 
     def save(self, *args, **kwargs):
@@ -53,7 +54,7 @@ class Query(models.Model):
         super(Query, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.params + " at " + self.site.name + " for " + self.user.email
+        return self.params + " at "+self.site.name+" for " + self.user.email
 
 
 class Crawler(models.Model):

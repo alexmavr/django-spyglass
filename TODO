@@ -1,14 +1,12 @@
-frontend:
+example:
     set background, grid relocations, area coloring
-
-tastypie:
-    test all apis
-
-backend:
-    completion notifications? (generic message queue vs email)
+    add sample notifications
 
 crawlie:
-    test for new content?
+    test for new content and daemonize
+
+spyglass:
+    documentation
 
 deployment:
     set ApiKeyAuthentication

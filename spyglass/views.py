@@ -1,19 +1,17 @@
 from django.contrib.auth.models import User
-from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
+from django.http import Http404
 from django.shortcuts import redirect
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
+from django.template import RequestContext
 from django.utils.timezone import now
 from django.utils.timezone import timedelta
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.http import Http404
-from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
-from django.conf import settings
 from tastypie.models import ApiKey
 from .forms import QueryForm
-from .utils import add_users
 from .utils import conditionally
 from .models import Crawler
 
@@ -82,7 +80,7 @@ def receive_query(request):
             mail = form.data['email']
 
             # If SPYGLASS_ADD_USERS
-            if add_users():
+            if getattr(settings, 'SPYGLASS_ADD_USERS', False):
                 # Create the user if he doesnt exist
                 defaults={'username':mail.split('@')[0]}
                 query.user, created = User.objects.get_or_create(email=mail,
