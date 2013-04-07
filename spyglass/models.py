@@ -46,18 +46,32 @@ class Query(models.Model):
                                     verbose_name="Previous Content Hash")
 
     next_check = models.DateTimeField(auto_now_add=True, \
-                                        verbose_name="Next check")
+                                    verbose_name="Next check")
     last_mod = models.DateTimeField(blank=True, verbose_name="Last Modified")
-
-    def save(self, *args, **kwargs):
-        self.next_check = now() + timedelta(minutes=self.site.poll_time)
-        super(Query, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return self.params + " at "+self.site.name+" for " + self.user.email
 
     class Meta:
         verbose_name_plural = "queries"
+
+    def save(self, *args, **kwargs):
+        # Update next_check
+        self.next_check = now() + timedelta(minutes=self.site.poll_time)
+
+        # Populate the result foreign key based on existing hashes
+        try:
+            old_self = Query.objects.get(id=self.id)
+            if self.content_hash != old_self.content_hash:
+                existing = Query.objects.filter(content_hash=self.content_hash)
+                if existing:
+                    if existing[0].result is None:
+                        raise ValueError
+                    self.result = existing[0].result
+        except (Query.DoesNotExist):
+            pass
+        super(Query, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.params + " at " + self.site.name+ " for " + self.user.email
+
 
 
 

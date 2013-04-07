@@ -3,7 +3,8 @@ example:
     add sample notifications
 
 crawlie:
-    test for new content and daemonize
+    handle server crashes, 500's, 503's
+    check result content for params (if any) before marking as completed
 
 spyglass:
     documentation

@@ -16,12 +16,11 @@ class MetaResource(ModelResource):
         meta = get_meta()
         queryset = meta.objects.all()
         resource_name = 'meta'
-        allowed_methods = ['get','post','put']
+        allowed_methods = ['post','put']
 
         validation = Validation()
         authentication = Authentication()
         authorization = Authorization()
-        filtering = dict(map(lambda x:(x.name, 'exact'), meta._meta.fields))
 
 
 class SiteResource(ModelResource):
@@ -55,12 +54,12 @@ class QueryResource(ModelResource):
         queryset = Query.objects.filter(completed=False).order_by('next_check')
         resource_name = 'query'
 
-        allowed_methods = ['get','patch']
+        allowed_methods = ['get','post','patch']
         validation = Validation()
         authentication = Authentication()
         authorization = Authorization()
 
-    # Update an object's time stamp before sending through save's side effects
+    # Update a query's timestamp using save's side effects
     def obj_get_list(self, request=None, **kwargs):
         items = super(QueryResource, self).obj_get_list(self, **kwargs)
         for item in items:
