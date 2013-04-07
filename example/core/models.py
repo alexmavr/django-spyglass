@@ -9,7 +9,7 @@ class NewsStory(models.Model):
     def __unicode__(self):
         return self.headline
 
-    def save(self):
+    def save(self, *args, **kwargs):
         # from .tasks import notify
         # notify.delay(query-to-get-user-email)
         super(NewsStory, self).save(*args, **kwargs)
