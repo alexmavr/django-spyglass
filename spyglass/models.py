@@ -56,6 +56,10 @@ class Query(models.Model):
     def __unicode__(self):
         return self.params + " at "+self.site.name+" for " + self.user.email
 
+    class Meta:
+        verbose_name_plural = "queries"
+
+
 
 class Crawler(models.Model):
     api_key = models.CharField(max_length=100, primary_key=True,
