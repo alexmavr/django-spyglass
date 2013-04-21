@@ -52,7 +52,6 @@ class QueryResource(ModelResource):
                                full=False)
     class Meta:
         queryset = Query.objects.filter(completed=False).order_by('next_check')
-        # .filter(next_check__lt=now()).order_by('next_check')
         resource_name = 'query'
 
         allowed_methods = ['get','post','patch','put']
@@ -62,7 +61,7 @@ class QueryResource(ModelResource):
 
     # Update a query's timestamp using save's side effects
     def obj_get_list(self, request=None, **kwargs):
-        items = super(QueryResource, self).obj_get_list(self,  **kwargs)
+        items = super(QueryResource, self).obj_get_list(self,  **kwargs).filter(next_check__lt=now())
         for item in items:
             item.save()
         return items
