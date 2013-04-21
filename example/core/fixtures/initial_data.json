@@ -41,7 +41,7 @@
         "pk": 2,
         "fields": {
             "name":"Hacker News",
-            "url":"http://news.ycombinator.org",
+            "url":"http://news.ycombinator.com",
             "poll_time": 1
 
         }
