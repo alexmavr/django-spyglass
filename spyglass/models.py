@@ -44,7 +44,6 @@ class Query(models.Model):
                                     verbose_name="Query Parameters")
     content_hash = models.CharField(max_length=70, blank=True, default="",
                                     verbose_name="Previous Content Hash")
-
     next_check = models.DateTimeField(auto_now_add=True, \
                                     verbose_name="Next check")
     last_mod = models.DateTimeField(blank=True, verbose_name="Last Modified")

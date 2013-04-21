@@ -61,7 +61,7 @@ class QueryResource(ModelResource):
 
     # Update a query's timestamp using save's side effects
     def obj_get_list(self, request=None, **kwargs):
-        items = super(QueryResource, self).obj_get_list(self,  **kwargs).filter(next_check__lt=now())
+        items = super(QueryResource, self).obj_get_list(self,  **kwargs).filter(next_check__lt=now()).order_by('next_check')
         for item in items:
             item.save()
         return items

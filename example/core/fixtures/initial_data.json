@@ -5,7 +5,7 @@
         "fields": {
             "name":"News247",
             "url":"http://news247.gr",
-            "poll_time": 12
+            "poll_time": 1
 
         }
     },
@@ -34,6 +34,43 @@
             "site": 1,
             "field_name": "Subtitle",
             "xpath": "/html/body/div[4]/div/div/div[2]/div/div/div/p"
+        }
+    },
+    {
+        "model": "spyglass.Site",
+        "pk": 2,
+        "fields": {
+            "name":"Hacker News",
+            "url":"http://news.ycombinator.org",
+            "poll_time": 1
+
+        }
+    },
+    {
+        "model": "spyglass.DataField",
+        "pk": 4,
+        "fields": {
+            "site": 2,
+            "field_name": "Headline",
+            "xpath": "/html/body/center/table/tbody/tr[3]/td/table/tbody/tr/td[3]/a"
+        }
+    },
+    {
+        "model": "spyglass.DataField",
+        "pk": 5,
+        "fields": {
+            "site": 2,
+            "field_name": "User",
+            "xpath": "/html/body/center/table/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/a"
+        }
+    },
+    {
+        "model": "spyglass.DataField",
+        "pk": 6,
+        "fields": {
+            "site": 2,
+            "field_name": "Points",
+            "xpath": "/html/body/center/table/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/span"
         }
     }
 ]
