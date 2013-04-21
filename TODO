@@ -1,6 +1,7 @@
 example:
     set background, grid relocations, area coloring
     add sample notifications
+    notification function on Notification's __save__
 
 crawlie:
     handle server crashes, 500's, 503's

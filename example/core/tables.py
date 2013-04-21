@@ -14,11 +14,7 @@ class ProfileTable(tables.Table):
 
 class NotificationTable(tables.Table):
     id = tables.Column(visible=False)
-    headline = tables.Column
-    category = tables.Column
-    subtitle = tables.Column
 
     class Meta:
-        model = NewsStory
+        model = Simple
         attrs = {'class': 'table table-striped table-bordered'}
-

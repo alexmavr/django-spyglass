@@ -7,11 +7,13 @@ from spyglass.models import Site
 from spyglass.models import DataField
 from spyglass.models import Crawler
 from spyglass.models import Query
+from spyglass.models import Notification
 
 admin.site.register(Site)
 admin.site.register(DataField)
 admin.site.register(Crawler)
 admin.site.register(Query)
+admin.site.register(Notification)
 
 admin.site.register(ApiKey)
 admin.site.register(ApiAccess)
