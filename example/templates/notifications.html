@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+{% load render_table from django_tables2 %}
+
+{% block head_title %}News Spyglass - Notifications{% endblock %}
+
+{% block content %}
+   <h4 class="pagination-centered"> Notification History</h4>
+   {% if data %}
+       <div class="row">
+            <div class="span9">
+               {% render_table data %}
+            </div>
+       </div>
+   {% else %}
+       <h2>There are no notifications!</h2>
+       <h3>You should search for something</h3>
+   {% endif %}
+
+{% endblock %}

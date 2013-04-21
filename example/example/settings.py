@@ -44,7 +44,7 @@ USE_I18N = True
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = False
+USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -158,6 +158,36 @@ LOGGING = {
     }
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        # Log to a text file that can be rotated by logrotate
+        'logfile': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': '/home/afein/Repos/django-spyglass/log'
+        },
+    },
+    'loggers': {
+        # Might as well log any errors anywhere else in Django
+        'django': {
+            'handlers': ['logfile'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        # Your own app - this assumes all your logger names start with "myapp."
+        'spyglass': {
+            'handlers': ['logfile'],
+            'level': 'WARNING', # Or maybe INFO or DEBUG
+            'propagate': False
+        },
+        'example': {
+            'handlers': ['logfile'],
+            'level': 'WARNING', # Or maybe INFO or DEBUG
+            'propagate': False
+        },
+    },
+}
 #===============  SPYGLASS Settings ====================#
 
 # Declare the model you wish spyglass to populate.

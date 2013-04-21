@@ -1,6 +1,6 @@
 from tastypie import fields
+from django.utils.timezone import now
 from tastypie.resources import ModelResource
-#from tastypie.resources import ALL, ALL_WITH_RELATIONS
 from tastypie.validation import Validation
 from tastypie.authentication import Authentication
 from tastypie.authentication import ApiKeyAuthentication
@@ -52,16 +52,17 @@ class QueryResource(ModelResource):
                                full=False)
     class Meta:
         queryset = Query.objects.filter(completed=False).order_by('next_check')
+        # .filter(next_check__lt=now()).order_by('next_check')
         resource_name = 'query'
 
-        allowed_methods = ['get','post','patch']
+        allowed_methods = ['get','post','patch','put']
         validation = Validation()
         authentication = Authentication()
         authorization = Authorization()
 
     # Update a query's timestamp using save's side effects
     def obj_get_list(self, request=None, **kwargs):
-        items = super(QueryResource, self).obj_get_list(self, **kwargs)
+        items = super(QueryResource, self).obj_get_list(self,  **kwargs)
         for item in items:
             item.save()
         return items

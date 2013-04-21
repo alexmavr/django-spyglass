@@ -6,9 +6,12 @@ from django.views.generic import TemplateView
 from django.http import Http404
 from django_tables2 import RequestConfig
 from core.tables import ProfileTable
+from core.tables import NotificationTable
 from spyglass.forms import QueryForm
 from spyglass.forms import EditQueryForm
 from spyglass.models import Query
+from spyglass.models import Notification
+from .models import NewsStory
 
 class thanks(TemplateView):
     template_name="messages/thanks.html"
@@ -20,10 +23,18 @@ def landing(request):
         form = QueryForm()
     return render_to_response("landing.html", locals(), RequestContext(request))
 
+@login_required
 def profile(request):
     data = ProfileTable(Query.objects.filter(user=request.user))
     RequestConfig(request, paginate={"per_page": 25}).configure(data)
     return render_to_response("profile.html",locals(),
+                              context_instance=RequestContext(request))
+
+@login_required
+def notifications(request):
+    data = NotificationTable(Notification.objects.filter(user=request.user))
+    RequestConfig(request, paginate={"per_page": 25}).configure(data)
+    return render_to_response("notifications.html",locals(),
                               context_instance=RequestContext(request))
 
 @login_required
@@ -32,7 +43,7 @@ def edit(request,rqid):
     if request.POST:
         form = EditQueryForm(request.POST,instance=query)
 
-        # Process the form 
+        # Process the form
         queryreq = form.save(commit=False)
         queryreq.email = request.user.email
         queryreq.save()

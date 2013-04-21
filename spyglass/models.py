@@ -23,9 +23,9 @@ class Site(models.Model):
 
 class DataField(models.Model):
     site = models.ForeignKey(Site, verbose_name="Site",
-                                 related_name="datafields_set")
+                                    related_name="datafields_set")
     field_name = models.CharField(max_length=150, blank=False,
-                                  verbose_name="Field Name")
+                                    verbose_name="Field Name")
     xpath = models.CharField(max_length=150, blank=False, verbose_name="XPath")
 
     def __unicode__(self):
@@ -63,8 +63,12 @@ class Query(models.Model):
                 existing = Query.objects.filter(content_hash=self.content_hash)
                 if existing:
                     if existing[0].result is None:
-                        raise ValueError
+                        raise ValueError        # First occurence not populated
                     self.result = existing[0].result
+                # Create a new notification with the correct result
+                n = Notification(user=self.user, \
+                                 result=self.result )
+                n.save()
         except (Query.DoesNotExist):
             pass
         super(Query, self).save(*args, **kwargs)
@@ -72,16 +76,21 @@ class Query(models.Model):
     def __unicode__(self):
         return self.params + " at " + self.site.name+ " for " + self.user.email
 
+class Notification(models.Model):
+    user = models.ForeignKey(User)
+    result = models.ForeignKey(Metamodel)
+    time = models.DateTimeField(auto_now_add=True, verbose_name="Notified")
 
-
+    def __unicode__(self):
+        return self.user.username + " at " + str(self.time)
 
 class Crawler(models.Model):
     api_key = models.CharField(max_length=100, primary_key=True,
-                                   verbose_name="Crawler Api Key")
+                                    verbose_name="Crawler Api Key")
     last_seen = models.DateTimeField(auto_now=True, auto_now_add=True,
-                                     verbose_name="Last Seen At")
+                                    verbose_name="Last Seen At")
     trust_level = models.IntegerField(default=10, blank=False,
-                                      verbose_name="Trust Level")
+                                    verbose_name="Trust Level")
 
     def __unicode__(self):
         return self.api_key

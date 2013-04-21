@@ -25,9 +25,9 @@
                               data-placement="top"
                               data-html='true'
                               data-animation='true'
-                              data-width='400'
+                              data-width='700'
                               onClick="$('#{{ row.1.api_key }}').popover('toggle');" 
-                              data-content='{{ row.1.api_key }} '> {{ row.1.api_key|truncatechars:14 }}</i></td>
+                              data-content='{{ row.1.api_key }}'> {{ row.1.api_key|truncatechars:30 }}</i></td>
                       <td>
                           {% if row.1.able %}
                               <a class="btn btn-block btn-small btn-danger" href="/change/{{ row.1.uid }}/0">Disable</a>

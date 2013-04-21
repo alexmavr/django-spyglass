@@ -8,7 +8,7 @@ def conditionally(dec, cond):
          return dec(f)
      return resdec
 
-# Receive the metamodel class from settings.METAMODEL
+# Retrieve the metamodel class from settings.METAMODEL
 def get_meta():
     package = ".".join(settings.METAMODEL.split('.')[:-1])
     modelclass = settings.METAMODEL.split('.')[-1]
