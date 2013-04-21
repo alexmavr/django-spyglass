@@ -165,7 +165,7 @@ LOGGING = {
         # Log to a text file that can be rotated by logrotate
         'logfile': {
             'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/home/afein/Repos/django-spyglass/log'
+            'filename': PROJECT_ROOT + 'log'
         },
     },
     'loggers': {
