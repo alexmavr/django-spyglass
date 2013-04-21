@@ -40,8 +40,8 @@
         "model": "spyglass.Site",
         "pk": 2,
         "fields": {
-            "name":"Hacker News",
-            "url":"http://news.ycombinator.com",
+            "name":"Google News",
+            "url":"http://news.google.gr",
             "poll_time": 1
 
         }
@@ -52,7 +52,7 @@
         "fields": {
             "site": 2,
             "field_name": "Headline",
-            "xpath": "/html/body/center/table/tbody/tr[3]/td/table/tbody/tr/td[3]/a"
+            "xpath": "/html/body/div[3]/div/div/div/div[3]/div/div/table/tbody/tr/td/div/div/div/div[2]/div[2]/div/div/div/div[2]/table/tbody/tr/td[2]/div/h2/a/span"
         }
     },
     {
@@ -60,17 +60,8 @@
         "pk": 5,
         "fields": {
             "site": 2,
-            "field_name": "User",
-            "xpath": "/html/body/center/table/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/a"
-        }
-    },
-    {
-        "model": "spyglass.DataField",
-        "pk": 6,
-        "fields": {
-            "site": 2,
-            "field_name": "Points",
-            "xpath": "/html/body/center/table/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/span"
+            "field_name": "Content",
+            "xpath": "/html/body/div[3]/div/div/div/div[3]/div/div/table/tbody/tr/td/div/div/div/div[2]/div[2]/div/div/div/div[2]/table/tbody/tr/td[2]/div[3]"
         }
     }
 ]
