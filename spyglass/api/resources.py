@@ -2,7 +2,6 @@ from tastypie import fields
 from django.utils.timezone import now
 from tastypie.resources import ModelResource
 from tastypie.validation import Validation
-from tastypie.authentication import Authentication
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.authorization import Authorization
 from ..models import Crawler
@@ -19,7 +18,7 @@ class MetaResource(ModelResource):
         allowed_methods = ['post','put']
 
         validation = Validation()
-        authentication = Authentication()
+        authentication = ApiKeyAuthentication()
         authorization = Authorization()
 
 
@@ -30,7 +29,7 @@ class SiteResource(ModelResource):
         allowed_methods = ['get']
 
         validation = Validation()
-        authentication = Authentication()
+        authentication = ApiKeyAuthentication()
         authorization = Authorization()
 
 
@@ -41,7 +40,7 @@ class PathsResource(ModelResource):
         resource_name = "paths"
         allowed_methods = ['get']
         validation = Validation()
-        authentication = Authentication()
+        authentication = ApiKeyAuthentication()
         authorization = Authorization()
         fields = ('xpath', 'site', 'field_name')
 
@@ -56,7 +55,7 @@ class QueryResource(ModelResource):
 
         allowed_methods = ['get','post','patch','put']
         validation = Validation()
-        authentication = Authentication()
+        authentication = ApiKeyAuthentication()
         authorization = Authorization()
 
     # Update a query's timestamp using save's side effects
@@ -74,5 +73,5 @@ class CrawlerResource(ModelResource):
 
         allowed_methods = ['get','patch']
         validation = Validation()
-        authentication =  Authentication()
+        authentication =  ApiKeyAuthentication()
         authorization = Authorization()
