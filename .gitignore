@@ -5,3 +5,5 @@
 *.~swp
 localsettings.py
 spydb
+log
+example/static/
