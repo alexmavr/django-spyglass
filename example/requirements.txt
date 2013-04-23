@@ -3,6 +3,8 @@ Unipath==0.2.1
 django-allauth==0.9.0
 django-tables2==0.13.0
 django-tastypie==0.9.11
+django-extensions==1.1.1
+django-coverage==1.2.2
 httplib2==0.8
 mimeparse==0.1.3
 oauth2==1.5.211
@@ -13,4 +15,3 @@ requests==1.1.0
 unittest2==0.5.1
 wsgiref==0.1.2
 coverage==3.6
-django-coverage==1.2.2
