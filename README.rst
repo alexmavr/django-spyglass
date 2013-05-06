@@ -48,10 +48,11 @@ Installation
 
 3. Add 
 
-   .. code-block:: python
-      import spyglass.urls 
+    .. code-block:: python
+        :linenos:
+        import spyglass.urls 
 
-      url(r'^', include(spyglass.urls)) 
+        url(r'^', include(spyglass.urls)) 
 
    to your urls.py
 4. Add some sites on spyglass's Site model through fixtures or direct access
