@@ -11,9 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   Introduction
-   Installation
-    
+   Getting Started
    Features
 
 
