@@ -7,3 +7,4 @@ localsettings.py
 spydb
 log
 example/static/
+docs/build/

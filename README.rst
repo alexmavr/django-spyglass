@@ -40,13 +40,29 @@ Deployment
 
 Installation 
 ==============
-1. Add ``spyglass`` to ``INSTALLED_APPS``.
-2. Add ``METAMODEL='<path-to-your-model>'`` for the model to be populated.
+1. Add ``spyglass`` to ``INSTALLED_APPS`` in your ``settings.py``.
+   
+2. Add ``METAMODEL='<path-to-your-model>'`` in settings.py for the model to be populated.
+
    For example, ``METAMODEL='core.models.NewsStory'`` 
-3. Add some sites on spyglass's Site model through fixtures or direct access
-4. For each Site entry, create a DataField entry for each field of the metamodel with an XPath where the crawlers can find the data to populate the field. This is explained in detail at the documentation_
-5. Set up as many instances of spyglass-crawlie_ as you need and edit their serverconf and userconf files to target your server
-6. Run the web server and start the crawlers
+
+3. Add 
+
+   .. code-block:: python
+      import spyglass.urls 
+
+      url(r'^', include(spyglass.urls)) 
+
+   to your urls.py
+4. Add some sites on spyglass's Site model through fixtures or direct access
+
+5. For each Site entry, create a DataField entry for each field of the metamodel with an XPath where the crawlers can find the data to populate the field. 
+   This is explained in detail at the documentation_
+
+6. Set up as many instances of spyglass-crawlie_ as you need and edit their serverconf and userconf files to target your server
+
 
 .. _documentation: http://spyglass.readthedocs.org/ 
 .. _spyglass-crawlie: http://github.com/mastergreg/spyglass-crawlie.git
+.. role:: python(code)
+   :language: python
