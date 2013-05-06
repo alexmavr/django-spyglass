@@ -121,7 +121,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'spyglass',
     'core',
-    'tastypie',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

@@ -12,10 +12,10 @@ Features
 Basic Usage
 -----------
 
-* Specify a model of yours to be populated
+* Specify a model to be populated
 * Add a collection of sites to be crawled
 * For each site, specify an XPath for every field of the model
-* Run any number of crawlers and watch your model populate with new content
+* Start the server and any number of crawlers and watch the model populate with new content!
 
 Extra Goodies
 -------------
@@ -36,5 +36,15 @@ Deployment
 ----------
 * spyglass-crawlie (http://github.com/mastergreg/spyglass-crawlie)
 
-Installation and Usage
+Installation 
 ==============
+1. Add ``spyglass`` to ``INSTALLED_APPS``.
+2. Add ``METAMODEL='<path-to-your-model>'`` for the model to be populated.
+   For example, ``METAMODEL='core.models.NewsStory'`` 
+3. Add some sites on spyglass's Site model through fixtures or direct access
+4. For each Site entry, create a DataField entry for each field of the metamodel with an XPath where the crawlers can find the data to populate the field. This is explained in detail at the documentation_
+5. Set up as many instances of spyglass-crawlie_ as you need and edit their serverconf and userconf files to target your server
+6. Run the web server and start the crawlers
+
+.. _documentation: http://spyglass.readthedocs.org/ 
+.. _spyglass-crawlie: http://github.com/mastergreg/spyglass-crawlie.git
