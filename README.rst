@@ -6,6 +6,8 @@ Monitor real-time content through distributed web crawling.
 
 Currently at pre-alpha development.
 
+For detailed instructions, view the documentation_
+
 Features
 ========
 
@@ -34,7 +36,7 @@ Installation
 
 Deployment
 ----------
-* spyglass-crawlie (http://github.com/mastergreg/spyglass-crawlie)
+* spyglass-crawlie_
 
 Installation 
 ==============
