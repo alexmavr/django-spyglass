@@ -5,6 +5,7 @@
 
 Welcome to Spyglass!
 ====================
+Spyglass provides real-time content notifications by distributed crawling.
 
 Contents:
 
@@ -13,6 +14,7 @@ Contents:
 
    Getting Started
    Features
+   Examples
 
 
 
