@@ -42,18 +42,15 @@ Installation
 ==============
 1. Add ``spyglass`` to ``INSTALLED_APPS`` in your ``settings.py``.
    
-2. Add ``METAMODEL='<path-to-your-model>'`` in settings.py for the model to be populated.
+2. Add ``METAMODEL='<path-to-your-model>'`` in ``settings.py`` for the model to be populated.
 
    For example, ``METAMODEL='core.models.NewsStory'`` 
 
 3. Add 
+   .. code-block:: python
+      import spyglass.urls 
 
-    .. code-block:: python
-        :linenos:
-        import spyglass.urls 
-
-        url(r'^', include(spyglass.urls)) 
-
+      url(r'^', include(spyglass.urls)) 
    to your urls.py
 4. Add some sites on spyglass's Site model through fixtures or direct access
 
