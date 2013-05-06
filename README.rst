@@ -47,7 +47,7 @@ Installation
    For example, ``METAMODEL='core.models.NewsStory'`` 
 
 3. Add 
-   .. code-block:: python
+   .. code-block:: 
       import spyglass.urls 
 
       url(r'^', include(spyglass.urls)) 
