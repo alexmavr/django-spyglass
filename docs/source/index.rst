@@ -5,7 +5,8 @@
 
 Welcome to Spyglass!
 ====================
-Spyglass provides real-time content notifications by distributed crawling.
+Spyglass provides real-time content notifications to a Django application by distributed crawling.
+
 
 Contents:
 
@@ -14,7 +15,7 @@ Contents:
 
    Getting Started
    Features
-   Examples
+   Example
 
 
 

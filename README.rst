@@ -6,7 +6,7 @@ Monitor real-time content through distributed web crawling.
 
 Currently at pre-alpha development.
 
-For detailed instructions, view the documentation_
+Spyglass is licenced under the BSD license
 
 Features
 ========
@@ -38,8 +38,11 @@ Deployment
 ----------
 * spyglass-crawlie_
 
-Installation 
+Configuration
 ==============
+
+For detailed instructions, view the documentation_
+
 1. Add ``spyglass`` to ``INSTALLED_APPS`` in your ``settings.py``.
    
 2. Add ``METAMODEL='<path-to-your-model>'`` in ``settings.py`` for the model to be populated.

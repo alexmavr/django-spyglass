@@ -1,2 +1,3 @@
-documentation + egg?
-settings support for generic notification function on Notification's __save__
+fill documentation 
+python egg
+settings support for generic notification function call on Notification's __save__
