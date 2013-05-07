@@ -10,11 +10,34 @@ django-tastypie.
 
 This tutorial assumes you have a basic understanding of Django.
 
-Additionally, throughout this tutorial we will be referencing an example
-configuration called News Spyglass. 
-It monitors two news sites for news stories and can be found in the example
-folder of spyglass' github repository.
+News Spyglass
+=======
+Throughout this tutorial we will be referencing an example configuration called
+News Spyglass. 
 
+It's a news monitoring service that receives queries from users containing:
+* Search Terms String
+* A Site name from a selection box
+* A Persistent choice box that when selected the query won't be completed after
+  one notification.
+
+Additionally, News Spyglass has one model, which will be the one populated by
+spyglass:
+
+::
+    class NewsStory(models.Model):
+        headline = models.CharField(max_length=200, blank=False)
+        category = models.CharField(max_length=200, blank=False)
+        subtitle = models.CharField(max_length=200, blank=False)
+
+        def __unicode__(self):
+            return self.headline
+
+        class Meta:
+            verbose_name_plural = "newsstories"
+
+The source code for News Spyglass can be found at the example_ folder of the
+github repo.
 
 Installation
 ============
@@ -40,13 +63,16 @@ Configuration
     ``url(r'^', include(spyglass.urls))`` to add the spyglass urls 
     to the root level.
     
- Spyglass does not require root level urls, so you are free to add them
- wherever you want as long as you edit the crawler's serverconf appropriately.
+    You can include spyglass' urls at any level but you'll have to edit the
+    crawler's serverconf appropriately.
 
- 4. Add a Site
+4. Sync the database with ``./manage.py syncdb``
+
+5. Add some sites usign django's admin panel, database access or fixtures.
+
 
 
 How many crawlers?
 ==================
-
+.. _example: http://github.com/tree/master/example
 .. _crawlie: http://github.com/mastergreg/spyglass-crawlie.git
