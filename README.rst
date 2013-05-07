@@ -2,11 +2,18 @@
 django-spyglass
 ===============
 
-Monitor real-time content through distributed web crawling.
+Spyglass is a django application that provides real-time content monitoring
+through distributed web crawling.
 
-Currently at pre-alpha development.
+After configuring a model, some sites to be crawled and an XPath for each field
+of the model on every site, you are ready to run as many crawlers as you want.
 
-Spyglass is licenced under the BSD license
+When a user submits a query, spyglass will instruct some connected crawlers to
+poll the related sites regularly and check for new content. When found, a new
+model instance will be created, the query will be satisfied and the user will
+be notified.
+
+It's currently at pre-alpha development and licenced under the BSD license.
 
 Features
 ========
@@ -17,13 +24,16 @@ Basic Usage
 * Specify a model to be populated
 * Add a collection of sites to be crawled
 * For each site, specify an XPath for every field of the model
-* Start the server and any number of crawlers and watch the model populate with new content!
+* Start the server and any number of crawlers and watch the model populate with
+  new content from those XPaths
 
 Extra Goodies
 -------------
 
-* Search terms on each individual query which are satisfied with fuzzy string matching
-* Notification hook for custom actions on new content availability
+* Individual queries have search terms which are satisfied with fuzzy string
+  matching and can be persistent or one-time only.
+* There is a notification hook that is triggered on new content availability
+  and allows for custom notification methods
 
 Requirements
 ============
@@ -36,7 +46,7 @@ Installation
 
 Deployment
 ----------
-* spyglass-crawlie_
+* spyglass-crawlie_ is the default crawler to be used with spyglass
 
 Configuration
 ==============
