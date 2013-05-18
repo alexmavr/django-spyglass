@@ -1,3 +1,9 @@
-fill documentation 
-python egg
-settings support for generic notification function call on Notification's __save__
+documentation:
+    Finish "Getting Started" section
+
+deployment:
+    python egg
+    deploy news spyglass (?)
+
+new features:
+    settings support for generic notification function call on Notification's __save__
