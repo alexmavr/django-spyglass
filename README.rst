@@ -74,6 +74,7 @@ Extras
 ======
 
 Class diagram: https://raw2.github.com/afein/SoftEng/master/SDD/files/spyglass.png
+
 Crawler state diagram: https://github.com/afein/SoftEng/blob/master/SDD/files/state.jpg
 
 .. _documentation: http://spyglass.readthedocs.org/ 
