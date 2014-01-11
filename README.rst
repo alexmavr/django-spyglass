@@ -2,38 +2,36 @@
 django-spyglass
 ===============
 
-Spyglass is a django application that provides real-time content monitoring
+Spyglass is a django application that provides real-time content monitoring of remote websites
 through distributed web crawling.
 
-After configuring a model, some sites to be crawled and an XPath for each field
-of the model on every site, you are ready to run as many crawlers as you want.
+Spyglass is configured by specifying a django Model to be populated by spyglass, a series of websites to be crawled,
+and an XPath for every combination of model fields and websites.
 
-When a user submits a query, spyglass will instruct some connected crawlers to
-poll the related sites regularly and check for new content. When found, a new
-model instance will be created, the query will be satisfied and the user will
-be notified.
+When a query is submitted to spyglass, a polling task is assigned to the crawler network for completion. 
+The crawlers regularly poll the desired websites until a match is found. 
+Then, a new model instance is instanciated and the user is notified.
 
-It's currently at pre-alpha development and licenced under the BSD license.
+Spyglass is licenced under the BSD license.
 
 Features
 ========
 
-Basic Usage
+Basic Features
 -----------
+* A polling interval can be specified for each website to prevent continuous polling.
+* User-specified search terms are satisfied with fuzzy string matching.
+* Queries can be one-time only, or persistent (notifying the user on future changes).
+* Notifications are performed with a generic hook which defaults to email notification.
 
-* Specify a model to be populated
+
+Configuration in a nutshell
+---------------------------
+* Specify a django model to be populated
 * Add a collection of sites to be crawled
 * For each site, specify an XPath for every field of the model
-* Start the server and any number of crawlers and watch the model populate with
-  new content from those XPaths
+* Deploy the application and run any number of crawlers
 
-Extra Goodies
--------------
-
-* Individual queries have search terms which are satisfied with fuzzy string
-  matching and can be persistent or one-time only.
-* There is a notification hook that is triggered on new content availability
-  and allows for custom notification methods
 
 Requirements
 ============
@@ -46,12 +44,12 @@ Installation
 
 Deployment
 ----------
-* spyglass-crawlie_ is the default crawler to be used with spyglass
+* spyglass-crawlie_ is the default crawler that can be used with spyglass
 
 Configuration
 ==============
 
-For detailed instructions, view the documentation_
+For detailed instructions, please view the documentation_
 
 1. Add ``spyglass`` to ``INSTALLED_APPS`` in your ``settings.py``.
    
@@ -70,7 +68,7 @@ For detailed instructions, view the documentation_
 5. For each Site entry, create a DataField entry for each field of the metamodel with an XPath where the crawlers can find the data to populate the field. 
    This is explained in detail at the documentation_
 
-6. Set up as many instances of spyglass-crawlie_ as you need and edit their serverconf and userconf files to target your server
+6. Set up as the required amount of spyglass-crawlie_ instances by editing their serverconf and userconf files to target the spyglass server
 
 
 .. _documentation: http://spyglass.readthedocs.org/ 
