@@ -70,6 +70,11 @@ For detailed instructions, please view the documentation_
 
 6. Set up as the required amount of spyglass-crawlie_ instances by editing their serverconf and userconf files to target the spyglass server
 
+Extras
+======
+
+Class diagram: https://raw2.github.com/afein/SoftEng/master/SDD/files/spyglass.png
+Crawler state diagram: https://github.com/afein/SoftEng/blob/master/SDD/files/state.jpg
 
 .. _documentation: http://spyglass.readthedocs.org/ 
 .. _spyglass-crawlie: http://github.com/mastergreg/spyglass-crawlie.git
