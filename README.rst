@@ -5,12 +5,12 @@ django-spyglass
 Spyglass is a django application that provides real-time content monitoring of remote websites
 through distributed web crawling.
 
-Spyglass is configured by specifying a django Model to be populated by spyglass, a series of websites to be crawled,
+Spyglass is configured by specifying a django Model to be populated, a series of websites to be crawled,
 and an XPath for every combination of model fields and websites.
 
 When a query is submitted to spyglass, a polling task is assigned to the crawler network for completion. 
 The crawlers regularly poll the desired websites until a match is found. 
-Then, a new model instance is instanciated and the user is notified.
+Then, a new model instance is created and the user is notified.
 
 Spyglass is licenced under the BSD license.
 
