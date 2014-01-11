@@ -14,6 +14,8 @@ Then, a new model instance is created and the user is notified.
 
 Spyglass is licenced under the BSD license.
 
+Available at the PyPI as 'django-spyglass'.
+
 Features
 ========
 
